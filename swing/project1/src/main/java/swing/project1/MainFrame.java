@@ -17,8 +17,8 @@ public class MainFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainFrame mainFrame1 = new MainFrame();
-					mainFrame1.setVisible(true);
+					MainFrame mainFrame = new MainFrame();
+					mainFrame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
