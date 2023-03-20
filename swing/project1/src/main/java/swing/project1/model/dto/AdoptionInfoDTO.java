@@ -1,5 +1,7 @@
 package swing.project1.model.dto;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
 public class AdoptionInfoDTO {
@@ -34,6 +36,11 @@ public class AdoptionInfoDTO {
 
 	public AdoptionInfoDTO() {
 
+	}
+	
+	public AdoptionInfoDTO(ResultSet rs) throws SQLException {
+		this.animal_id = rs.getInt("animal_id");
+		// TODO ...
 	}
 
 	public int getAnimal_id() {

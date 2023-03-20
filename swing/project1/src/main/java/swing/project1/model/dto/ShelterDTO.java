@@ -1,5 +1,8 @@
 package swing.project1.model.dto;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class ShelterDTO {
 	int shelter_pkid;
 	String shelter_name;
@@ -7,6 +10,10 @@ public class ShelterDTO {
 	public ShelterDTO() {
 		this.shelter_pkid = 0;
 		this.shelter_name = "不限";
+	}
+	
+	public ShelterDTO(ResultSet rs) throws SQLException {
+		// TODO ...
 	}
 
 	public int getShelter_pkid() {

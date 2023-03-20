@@ -1,27 +1,27 @@
 package swing.project1.components;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import java.awt.BorderLayout;
-import javax.swing.JLabel;
 import java.awt.FlowLayout;
-import javax.swing.JRadioButton;
+import java.awt.GridLayout;
+import java.util.ArrayList;
+
 import javax.swing.Box;
 import javax.swing.JButton;
-import javax.swing.JSeparator;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import swing.project1.model.QueryItem;
 import swing.project1.model.dto.AdoptionInfoDTO;
 import swing.project1.model.dto.ShelterDTO;
-
-import java.awt.GridLayout;
-import java.util.ArrayList;
+import swing.project1.model.listener.QueryBtnListener;
 
 public class MainFrame extends JFrame {
 
@@ -35,7 +35,7 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		setTitle("動物認領養");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1024, 768);
+		setBounds(100, 100, 1480, 900);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -118,10 +118,11 @@ public class MainFrame extends JFrame {
 		horizontalBoxShelter.add(lblShelter);
 
 		cbxShelter = new JComboBox<String>();
-		listShelter(null);
+		listShelter(getShelterList());
 		horizontalBoxShelter.add(cbxShelter);
 
 		JButton btnQuery = new JButton("查詢");
+		btnQuery.addActionListener(new QueryBtnListener(this));
 		panelCondition.add(btnQuery);
 
 		JPanel panelQueryResult = new JPanel();
@@ -134,18 +135,22 @@ public class MainFrame extends JFrame {
 		panelQueryResultList = new JPanel();
 		panelQueryResult.add(panelQueryResultList);
 		panelQueryResultList.setLayout(new GridLayout(0, 4, 0, 0));
-		for (int i = 0; i < 8; i++) {
-			panelQueryResultList.add(new QueryItemPanel());
-		}
 	}
 
 	public void showQueryResult(ArrayList<AdoptionInfoDTO> queryItems) {
-		for (int i = 0; i < 8; i++) {
+		panelQueryResultList.removeAll();
+		for (int i = 0; i < queryItems.size(); i++) {
 			panelQueryResultList.add(new QueryItemPanel(new QueryItem(queryItems.get(i))));
+			if(i >= 7) {
+				break;
+			}
 		}
+		revalidate();
+		repaint();
 	}
 
 	public void listShelter(ArrayList<ShelterDTO> shelterList) {
+		cbxShelter.removeAllItems();
 		ShelterDTO allShelter = new ShelterDTO();
 		cbxShelter.addItem(allShelter.getText());
 		if (shelterList != null && !shelterList.isEmpty()) {
@@ -153,6 +158,13 @@ public class MainFrame extends JFrame {
 				cbxShelter.addItem(shelter.getText());
 			}
 		}
+	}
+	
+	private ArrayList<ShelterDTO> getShelterList(){
+		ArrayList<ShelterDTO> shelterList = new ArrayList<ShelterDTO>();
+		// TODO 
+		
+		return shelterList;
 	}
 
 }
