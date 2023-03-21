@@ -9,12 +9,13 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 public class ImagePanel extends JPanel {
+	private final String DEFAULT_IMG = "./res/image/no_ima.jpg";
 	private BufferedImage image;
 
 	public ImagePanel() {
 		try {
 			// TODO
-			image = ImageIO.read(new File("./res/image/no_ima.jpg"));
+			image = ImageIO.read(new File(DEFAULT_IMG));
 		} catch (IOException ex) {
 
 		}
@@ -66,6 +67,7 @@ public class ImagePanel extends JPanel {
 
 	public void setImage(String url) {
 		try {
+			url = url.isEmpty() ? DEFAULT_IMG : url;
 			image = ImageIO.read(new File(url));
 			repaint();
 		} catch (IOException e) {
