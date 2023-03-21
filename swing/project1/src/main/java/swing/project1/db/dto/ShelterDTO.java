@@ -1,4 +1,4 @@
-package swing.project1.model.dto;
+package swing.project1.db.dto;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

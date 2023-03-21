@@ -1,4 +1,4 @@
-package swing.project1.components;
+package swing.project1.view.components;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;

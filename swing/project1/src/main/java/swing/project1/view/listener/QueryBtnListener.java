@@ -1,11 +1,11 @@
-package swing.project1.model.listener;
+package swing.project1.view.listener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import swing.project1.components.MainFrame;
-import swing.project1.model.dto.AdoptionInfoDTO;
+import swing.project1.db.dto.AdoptionInfoDTO;
+import swing.project1.view.MainFrame;
 
 public class QueryBtnListener implements ActionListener{
 	private MainFrame parent;

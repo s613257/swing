@@ -1,6 +1,6 @@
 package swing.project1.model;
 
-import swing.project1.model.dto.AdoptionInfoDTO;
+import swing.project1.db.dto.AdoptionInfoDTO;
 
 public class QueryItem {
 	int animal_id;
