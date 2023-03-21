@@ -32,6 +32,7 @@ public class MainFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	
 	public MainFrame() {
 		setTitle("動物認領養");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

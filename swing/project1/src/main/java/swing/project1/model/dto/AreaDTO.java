@@ -10,9 +10,10 @@ public class AreaDTO {
 	public AreaDTO() {
 
 	}
-	
+
 	public AreaDTO(ResultSet rs) throws SQLException {
-		// TODO ...
+		this.area_pkid = rs.getInt("area_pkid");
+		this.area_name = rs.getString("area_name");
 	}
 
 	public int getArea_pkid() {

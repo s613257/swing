@@ -13,7 +13,8 @@ public class ShelterDTO {
 	}
 	
 	public ShelterDTO(ResultSet rs) throws SQLException {
-		// TODO ...
+		this.shelter_pkid = rs.getInt("shelter_pkid");
+		this.shelter_name = rs.getString("shelter_name");
 	}
 
 	public int getShelter_pkid() {

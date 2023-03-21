@@ -18,11 +18,6 @@ public class AdoptionInfoDTO {
 	String animal_age;
 	String animal_sterilization;
 	String animal_bacterin;
-	String animal_foundplace;
-	String animal_title;
-	String animal_status;
-	String animal_remark;
-	String animal_caption;
 	String animal_opendate;
 	Date animal_closeddate;
 	String animal_update;
@@ -37,10 +32,31 @@ public class AdoptionInfoDTO {
 	public AdoptionInfoDTO() {
 
 	}
-	
+
 	public AdoptionInfoDTO(ResultSet rs) throws SQLException {
 		this.animal_id = rs.getInt("animal_id");
-		// TODO ...
+		this.animal_subid = rs.getString("animal_subid");
+		this.animal_area_pkid = rs.getInt("animal_area_pkid");
+		this.animal_shelter_pkid = rs.getInt("animal_shelter_pkid");
+		this.animal_place = rs.getString("animal_place");
+		this.animal_kind = rs.getString("animal_kind");
+		this.animal_Variety = rs.getString("animal_Variety");
+		this.animal_sex = rs.getString("animal_sex");
+		this.animal_bodytype = rs.getString("animal_bodytype");
+		this.animal_colour = rs.getString("animal_colour");
+		this.animal_age = rs.getString("animal_age");
+		this.animal_sterilization = rs.getString("animal_sterilization");
+		this.animal_bacterin = rs.getString("animal_bacterin");
+		this.animal_opendate = rs.getString("animal_opendate");
+		this.animal_closeddate = rs.getDate("animal_closeddate");
+		this.animal_update = rs.getString("animal_update");
+		this.animal_createtime = rs.getDate("animal_createtime");
+		this.shelter_name = rs.getString("shelter_name");
+		this.album_file = rs.getString("album_file");
+		this.album_update = rs.getString("album_update");
+		this.cDate = rs.getString("cDate");
+		this.shelter_address = rs.getString("shelter_address");
+		this.shelter_tel = rs.getString("shelter_tel");
 	}
 
 	public int getAnimal_id() {
@@ -145,46 +161,6 @@ public class AdoptionInfoDTO {
 
 	public void setAnimal_bacterin(String animal_bacterin) {
 		this.animal_bacterin = animal_bacterin;
-	}
-
-	public String getAnimal_foundplace() {
-		return animal_foundplace;
-	}
-
-	public void setAnimal_foundplace(String animal_foundplace) {
-		this.animal_foundplace = animal_foundplace;
-	}
-
-	public String getAnimal_title() {
-		return animal_title;
-	}
-
-	public void setAnimal_title(String animal_title) {
-		this.animal_title = animal_title;
-	}
-
-	public String getAnimal_status() {
-		return animal_status;
-	}
-
-	public void setAnimal_status(String animal_status) {
-		this.animal_status = animal_status;
-	}
-
-	public String getAnimal_remark() {
-		return animal_remark;
-	}
-
-	public void setAnimal_remark(String animal_remark) {
-		this.animal_remark = animal_remark;
-	}
-
-	public String getAnimal_caption() {
-		return animal_caption;
-	}
-
-	public void setAnimal_caption(String animal_caption) {
-		this.animal_caption = animal_caption;
 	}
 
 	public String getAnimal_opendate() {
