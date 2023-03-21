@@ -27,4 +27,9 @@ public class ShelterDTO {
 	public String getText() {
 		return String.format("%d,%s",this.shelter_pkid,this.shelter_name);
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("shelter_pkid = %d, shelter_name = %s", shelter_pkid, shelter_name);
+	}
 }

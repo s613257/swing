@@ -28,15 +28,17 @@ public class BaseDAO_MySql {
 		return instance;
 	}
 
-	public static void closeAll(Statement stmt, ResultSet rs) throws SQLException {
-		if (rs != null) {
-			rs.close();
-		}
-		if (stmt != null) {
-			stmt.close();
-		}
-		if (instance != null) {
-			instance.close();
+	public static void closeAll(Statement stmt, ResultSet rs) {
+		try {
+			if (rs != null) {
+				rs.close();
+			}
+			if (stmt != null) {
+				stmt.close();
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 
