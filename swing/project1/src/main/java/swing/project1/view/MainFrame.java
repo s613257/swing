@@ -1,9 +1,10 @@
-package swing.project1.components;
+package swing.project1.view;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -18,21 +19,42 @@ import javax.swing.JSeparator;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
+import swing.project1.db.dao.ShelterDAO;
+import swing.project1.db.dao.impl.ShelterDAOImpl;
+import swing.project1.db.dto.AdoptionInfoDTO;
+import swing.project1.db.dto.ShelterDTO;
+import swing.project1.model.QueryCondition;
 import swing.project1.model.QueryItem;
-import swing.project1.model.dto.AdoptionInfoDTO;
-import swing.project1.model.dto.ShelterDTO;
-import swing.project1.model.listener.QueryBtnListener;
+import swing.project1.view.components.MyRadioButton;
+import swing.project1.view.components.MyRadioGroup;
+import swing.project1.view.listener.QueryBtnListener;
 
 public class MainFrame extends JFrame {
 
 	private JPanel contentPane;
 	private JPanel panelQueryResultList;
+
+	private List<ShelterDTO> shelterList = null;
+
+	// Kind
+	MyRadioGroup btnGroupKind;
+	MyRadioButton radioBtnCat;
+	MyRadioButton radioBtnDog;
+	MyRadioButton radioBtnOtherType;
+	MyRadioButton radioBtnAllType;
+
+	// Sex
+	MyRadioGroup btnGroupSex;
+	MyRadioButton radioBtnMale;
+	MyRadioButton radioBtnFemale;
+	MyRadioButton radioBtnAllSex;
+	// Sheelter
 	private JComboBox<String> cbxShelter;
 
 	/**
 	 * Create the frame.
 	 */
-	
+
 	public MainFrame() {
 		setTitle("動物認領養");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -73,23 +95,23 @@ public class MainFrame extends JFrame {
 		JLabel lblType = new JLabel("種類:");
 		horizontalBoxType.add(lblType);
 
-		MyRadioGroup btnGroupType = new MyRadioGroup();
-		MyRadioButton radioBtnCat = new MyRadioButton("貓", 0);
+		btnGroupKind = new MyRadioGroup();
+		radioBtnCat = new MyRadioButton("貓", 0);
 
 		horizontalBoxType.add(radioBtnCat);
-		btnGroupType.add(radioBtnCat);
+		btnGroupKind.add(radioBtnCat);
 
-		MyRadioButton radioBtnDog = new MyRadioButton("狗", 1);
+		radioBtnDog = new MyRadioButton("狗", 1);
 		horizontalBoxType.add(radioBtnDog);
-		btnGroupType.add(radioBtnDog);
+		btnGroupKind.add(radioBtnDog);
 
-		MyRadioButton radioBtnOtherType = new MyRadioButton("其他", 2);
+		radioBtnOtherType = new MyRadioButton("其他", 2);
 		horizontalBoxType.add(radioBtnOtherType);
-		btnGroupType.add(radioBtnOtherType);
+		btnGroupKind.add(radioBtnOtherType);
 
-		MyRadioButton radioBtnAllType = new MyRadioButton("不限", 3);
+		radioBtnAllType = new MyRadioButton("不限", 3);
 		horizontalBoxType.add(radioBtnAllType);
-		btnGroupType.add(radioBtnAllType);
+		btnGroupKind.add(radioBtnAllType);
 
 		Box horizontalBoxSex = Box.createHorizontalBox();
 		horizontalBoxSex.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -98,16 +120,16 @@ public class MainFrame extends JFrame {
 		JLabel lblSex = new JLabel("性別:");
 		horizontalBoxSex.add(lblSex);
 
-		MyRadioGroup btnGroupSex = new MyRadioGroup();
-		MyRadioButton radioBtnMale = new MyRadioButton("公", 0);
+		btnGroupSex = new MyRadioGroup();
+		radioBtnMale = new MyRadioButton("公", 0);
 		horizontalBoxSex.add(radioBtnMale);
 		btnGroupSex.add(radioBtnMale);
 
-		MyRadioButton radioBtnFemale = new MyRadioButton("母", 1);
+		radioBtnFemale = new MyRadioButton("母", 1);
 		horizontalBoxSex.add(radioBtnFemale);
 		btnGroupSex.add(radioBtnFemale);
 
-		MyRadioButton radioBtnAllSex = new MyRadioButton("不限", 2);
+		radioBtnAllSex = new MyRadioButton("不限", 2);
 		horizontalBoxSex.add(radioBtnAllSex);
 		btnGroupSex.add(radioBtnAllSex);
 
@@ -142,7 +164,7 @@ public class MainFrame extends JFrame {
 		panelQueryResultList.removeAll();
 		for (int i = 0; i < queryItems.size(); i++) {
 			panelQueryResultList.add(new QueryItemPanel(new QueryItem(queryItems.get(i))));
-			if(i >= 7) {
+			if (i >= 7) {
 				break;
 			}
 		}
@@ -150,7 +172,7 @@ public class MainFrame extends JFrame {
 		repaint();
 	}
 
-	public void listShelter(ArrayList<ShelterDTO> shelterList) {
+	public void listShelter(List<ShelterDTO> shelterList) {
 		cbxShelter.removeAllItems();
 		ShelterDTO allShelter = new ShelterDTO();
 		cbxShelter.addItem(allShelter.getText());
@@ -160,11 +182,20 @@ public class MainFrame extends JFrame {
 			}
 		}
 	}
-	
-	private ArrayList<ShelterDTO> getShelterList(){
-		ArrayList<ShelterDTO> shelterList = new ArrayList<ShelterDTO>();
-		// TODO 
-		
+
+	public QueryCondition getQueryCondition() {
+		QueryCondition qc = new QueryCondition();
+		qc.setKind(Integer.parseInt(btnGroupKind.getValue()));
+		qc.setSex(Integer.parseInt(btnGroupSex.getValue()));
+		qc.setShelterIdx(cbxShelter.getSelectedIndex());
+		return qc;
+	}
+
+	private List<ShelterDTO> getShelterList() {
+		if (shelterList == null) {
+			ShelterDAO shelterDAO = new ShelterDAOImpl();
+			shelterList = shelterDAO.getAllShelter();
+		}
 		return shelterList;
 	}
 
