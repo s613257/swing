@@ -13,14 +13,13 @@ import swing.project1.db.dto.AdoptionInfoDTO;
 import swing.project1.db.dto.ShelterDTO;
 
 public class AdoptionInfoDAOImpl extends BaseDAO_MySql implements AdoptionInfoDAO {
-	public List<AdoptionInfoDTO> getAllAdoptionInfo(){
+	public List<AdoptionInfoDTO> getAllAdoptionInfo() {
 
 		List<AdoptionInfoDTO> resultList = new ArrayList<AdoptionInfoDTO>();
 		Connection conn = getConnection();
 		Statement st = null;
 		ResultSet rs = null;
-		try
-		{
+		try {
 			st = conn.createStatement();
 			rs = st.executeQuery("Select * From t_adoption_info  limit 7");
 
@@ -28,15 +27,13 @@ public class AdoptionInfoDAOImpl extends BaseDAO_MySql implements AdoptionInfoDA
 				resultList.add(new AdoptionInfoDTO(rs));
 			}
 
-		}catch(
-				SQLException e)
-		{
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally
-		{
+		} finally {
 			closeAll(st, rs);
-		}return resultList;
+		}
+		return resultList;
 
-}
+	}
 
 }

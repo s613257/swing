@@ -1,28 +1,37 @@
 package swing.project1.db.dao.impl.base;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 public class BaseDAO_MySql {
-	private static String driver = "com.mysql.jdbc.Driver";
-	private static String url = "jdbc:mysql://localhost:3306/project1?useUnicode=true&characterEncoding=utf-8";
-	private static String user = "root";
-	private static String password = "1234";
 
 	private static Connection instance = null;
 
 	public static Connection getConnection() {
+
 		if (instance == null) {
 			try {
-				Class.forName(driver);
-				instance = DriverManager.getConnection(url, user, password);
+				Properties props = new Properties();
+				FileInputStream fis = new FileInputStream("project1/db.properties");
+				props.load(fis);
+				Class.forName(props.getProperty("MYSQL_DB_DRIVERCLASS"));
+				instance = DriverManager.getConnection(props.getProperty("MYSQL_DB_URL"),
+						props.getProperty("MYSQL_DB_USER"), props.getProperty("MYSQL_DB_PASSWORD"));
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			} catch (SQLException se) {
 				se.printStackTrace();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 		return instance;
