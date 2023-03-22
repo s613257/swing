@@ -243,6 +243,19 @@ public class AdoptionInfoDTO {
 		this.shelter_tel = shelter_tel;
 	}
 
+	@Override
+	public String toString() {
+		return "AdoptionInfoDTO [animal_id=" + animal_id + ", animal_subid=" + animal_subid + ", animal_area_pkid="
+				+ animal_area_pkid + ", animal_shelter_pkid=" + animal_shelter_pkid + ", animal_place=" + animal_place
+				+ ", animal_kind=" + animal_kind + ", animal_Variety=" + animal_Variety + ", animal_sex=" + animal_sex
+				+ ", animal_bodytype=" + animal_bodytype + ", animal_colour=" + animal_colour + ", animal_age="
+				+ animal_age + ", animal_sterilization=" + animal_sterilization + ", animal_bacterin=" + animal_bacterin
+				+ ", animal_opendate=" + animal_opendate + ", animal_closeddate=" + animal_closeddate
+				+ ", animal_update=" + animal_update + ", animal_createtime=" + animal_createtime + ", shelter_name="
+				+ shelter_name + ", album_file=" + album_file + ", album_update=" + album_update + ", cDate=" + cDate
+				+ ", shelter_address=" + shelter_address + ", shelter_tel=" + shelter_tel + "]";
+	}
+
 	public String getUpdateStament(){
 		// TODO 
 		return "";
