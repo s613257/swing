@@ -8,20 +8,22 @@ import swing.project1.db.dto.AdoptionInfoDTO;
 import swing.project1.model.QueryCondition;
 import swing.project1.view.MainFrame;
 
-public class QueryBtnListener implements ActionListener{
+public class QueryBtnListener implements ActionListener {
 	private MainFrame parent;
-	
+
 	public QueryBtnListener(MainFrame parent) {
 		this.parent = parent;
 	}
-	
+
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		ArrayList<AdoptionInfoDTO> queryItems = getQueryResult();
 		parent.showQueryResult(queryItems);
 	}
-	
-	private ArrayList<AdoptionInfoDTO> getQueryResult(){
+
+	private ArrayList<AdoptionInfoDTO> getQueryResult() {
 		QueryCondition qc = parent.getQueryCondition();
+		String queryCmd = "SELECT * FROM AdoptionInfo" + qc.toWhereStatemant();
 		// TODO
 		ArrayList<AdoptionInfoDTO> queryItems = new ArrayList<AdoptionInfoDTO>();
 		AdoptionInfoDTO aid1 = new AdoptionInfoDTO();
@@ -80,7 +82,7 @@ public class QueryBtnListener implements ActionListener{
 		queryItems.add(aid5);
 		queryItems.add(aid6);
 		queryItems.add(aid7);
-		
+
 		return queryItems;
 	}
 

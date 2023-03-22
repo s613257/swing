@@ -25,7 +25,7 @@ public class ImagePanel extends JPanel {
 				if (!isEditable) {
 					return;
 				}
-				String url = JOptionPane.showInputDialog("請輸入圖片路徑");
+				String url = JOptionPane.showInputDialog("請輸入圖片路徑"); // TODO Change to select file
 				if(url == null || url.isEmpty()) {
 					return;
 				}

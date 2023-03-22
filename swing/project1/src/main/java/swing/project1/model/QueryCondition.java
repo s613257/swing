@@ -41,17 +41,38 @@ public class QueryCondition {
 		boolean withCondition = false;
 		if(kind < KindType.ALL.getValue()){
 			withCondition = true;
-
+//			switch(KindType.values()[kind]) {
+//			case CAT:
+//				// TODO sb.append("");
+//				break;
+//			case DOG:
+//				// TODO
+//				break;
+//			case OTHER:
+//				// TODO
+//				break;
+//			default:
+//				break;
+//			}
 		}
 
 		if(sex < SexType.ALL.getValue()){
-			withCondition = true;
+			if(withCondition) {
+				sb.append(" AND ");
+			}else {
+				withCondition = true;
+			}
+			
 
 		}
 
 		if(shelterIdx > 0){ // Not 0(不限)
-			withCondition = true;
-
+			if(withCondition) {
+				sb.append(" AND ");
+			}else {
+				withCondition = true;
+			}
+			sb.append(String.format("'%s'", this.shelterName));
 		}
 		sb.append(";");
 		String resultStr = withCondition? (" WHERE " + sb.toString()):sb.toString();
@@ -61,13 +82,18 @@ public class QueryCondition {
 }
 
 enum KindType{
-	CAT(0), DOG(1), OTHER(2), ALL(3);
+	CAT(0, "貓"), DOG(1, "狗"), OTHER(2, "其他"), ALL(3, "不限");
 	private int value;
-	KindType(int value){
+	private String name;
+	KindType(int value, String name){
 		this.value = value;
+		this.name = name;
 	}
 	public int getValue(){
 		return this.value;
+	}
+	public String getName() {
+		return this.name;
 	}
 }
 
