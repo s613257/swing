@@ -13,6 +13,7 @@ import swing.project1.db.dto.ShelterDTO;
 
 public class ShelterDAOImpl extends BaseDAO_MySql implements ShelterDAO {
 
+	@Override
 	public List<ShelterDTO> getAllShelter() {
 		List<ShelterDTO> resultList = new ArrayList<ShelterDTO>();
 		Connection conn = getConnection();
@@ -20,7 +21,7 @@ public class ShelterDAOImpl extends BaseDAO_MySql implements ShelterDAO {
 		ResultSet rs = null;
 		try {
 			st = conn.createStatement();
-			rs = st.executeQuery("Select * From t_shelter");
+			rs = st.executeQuery("Select * From t_shelter order by shelter_pkid asc");
 
 			while (rs.next()) {
 				resultList.add(new ShelterDTO(rs));

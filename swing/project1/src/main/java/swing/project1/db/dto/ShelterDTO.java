@@ -4,8 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ShelterDTO {
-	int shelter_pkid;
-	String shelter_name;
+	protected int shelter_pkid;
+	protected String shelter_name;
 
 	public ShelterDTO() {
 		this.shelter_pkid = 0;
@@ -23,9 +23,6 @@ public class ShelterDTO {
 
 	public String getShelter_name() {
 		return shelter_name;
-	}
-	public String getText() {
-		return String.format("%d,%s",this.shelter_pkid,this.shelter_name);
 	}
 	
 	@Override

@@ -25,7 +25,11 @@ public class ImagePanel extends JPanel {
 				if (!isEditable) {
 					return;
 				}
-				setImage(JOptionPane.showInputDialog("請輸入圖片路徑"));
+				String url = JOptionPane.showInputDialog("請輸入圖片路徑");
+				if(url == null || url.isEmpty()) {
+					return;
+				}
+				setImage(url);
 			}
 		});
 	}
@@ -36,7 +40,7 @@ public class ImagePanel extends JPanel {
 
 	public void setImage(String url) {
 		try {
-			url = url.isEmpty() ? DEFAULT_IMG : url;
+			url = (url == null || url.isEmpty()) ? DEFAULT_IMG : url;
 			image = ImageIO.read(new File(url));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -52,7 +56,7 @@ public class ImagePanel extends JPanel {
 			image = ImageIO.read(new File(DEFAULT_IMG));
 		} catch (IOException e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			revalidate();
 			repaint();
 		}
