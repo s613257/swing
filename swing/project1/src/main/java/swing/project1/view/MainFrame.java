@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -25,6 +24,8 @@ import swing.project1.db.dto.AdoptionInfoDTO;
 import swing.project1.db.dto.ShelterDTO;
 import swing.project1.model.QueryCondition;
 import swing.project1.model.QueryItem;
+import swing.project1.model.ShelterListItem;
+import swing.project1.view.components.MyComboBox;
 import swing.project1.view.components.MyRadioButton;
 import swing.project1.view.components.MyRadioGroup;
 import swing.project1.view.listener.QueryBtnListener;
@@ -34,7 +35,7 @@ public class MainFrame extends JFrame {
 	private JPanel contentPane;
 	private JPanel panelQueryResultList;
 
-	private List<ShelterDTO> shelterList = null;
+	private static List<ShelterDTO> shelterList = null;
 
 	// Kind
 	MyRadioGroup btnGroupKind;
@@ -49,7 +50,7 @@ public class MainFrame extends JFrame {
 	MyRadioButton radioBtnFemale;
 	MyRadioButton radioBtnAllSex;
 	// Sheelter
-	private JComboBox<String> cbxShelter;
+	private MyComboBox<ShelterListItem> cbxShelter;
 
 	/**
 	 * Create the frame.
@@ -140,7 +141,7 @@ public class MainFrame extends JFrame {
 		JLabel lblShelter = new JLabel("收容所:");
 		horizontalBoxShelter.add(lblShelter);
 
-		cbxShelter = new JComboBox<String>();
+		cbxShelter = new MyComboBox<ShelterListItem>();
 		listShelter(getShelterList());
 		horizontalBoxShelter.add(cbxShelter);
 
@@ -174,11 +175,11 @@ public class MainFrame extends JFrame {
 
 	public void listShelter(List<ShelterDTO> shelterList) {
 		cbxShelter.removeAllItems();
-		ShelterDTO allShelter = new ShelterDTO();
-		cbxShelter.addItem(allShelter.getText());
+		ShelterListItem allShelter = new ShelterListItem();
+		cbxShelter.addItem(allShelter);
 		if (shelterList != null && !shelterList.isEmpty()) {
 			for (ShelterDTO shelter : shelterList) {
-				cbxShelter.addItem(shelter.getText());
+				cbxShelter.addItem(new ShelterListItem(shelter));
 			}
 		}
 	}
@@ -187,12 +188,12 @@ public class MainFrame extends JFrame {
 		QueryCondition qc = new QueryCondition();
 		qc.setKind(Integer.parseInt(btnGroupKind.getValue()));
 		qc.setSex(Integer.parseInt(btnGroupSex.getValue()));
-		qc.setShelterIdx(cbxShelter.getSelectedIndex());
-		qc.setShelterName((String)cbxShelter.getSelectedItem());
+		qc.setShelterIdx(((ShelterListItem)cbxShelter.getSelectedItem()).getShelter_pkid());
+		qc.setShelterName(((ShelterListItem)cbxShelter.getSelectedItem()).getShelter_name());
 		return qc;
 	}
 
-	private List<ShelterDTO> getShelterList() {
+	public static List<ShelterDTO> getShelterList() {
 		if (shelterList == null) {
 			ShelterDAO shelterDAO = new ShelterDAOImpl();
 			shelterList = shelterDAO.getAllShelter();

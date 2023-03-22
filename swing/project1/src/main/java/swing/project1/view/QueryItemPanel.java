@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -17,9 +18,12 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+import swing.project1.db.dto.ShelterDTO;
 import swing.project1.model.QueryItem;
+import swing.project1.model.ShelterListItem;
 import swing.project1.view.components.ComponentTextField;
 import swing.project1.view.components.ImagePanel;
+import swing.project1.view.components.MyComboBox;
 import swing.project1.view.components.MyRadioGroup;
 import swing.project1.view.components.intface.IComponents;
 
@@ -44,7 +48,7 @@ public class QueryItemPanel extends JPanel {
 	private MyRadioGroup btnGroupSex;
 	private JRadioButton radioBtnMale;
 	private JRadioButton radioBtnFemale;
-	private ComponentTextField jtfShelter;
+	private MyComboBox<ShelterListItem> cbxShelter;
 
 	private ArrayList<IComponents> components;
 	private boolean isEditMode = false;
@@ -68,7 +72,7 @@ public class QueryItemPanel extends JPanel {
 	}
 
 	private void initPanel() {
-		setBounds(0, 0, 294, 300);
+		setBounds(0, 0, 295, 300);
 		setBorder(new LineBorder(new Color(0, 0, 0)));
 		components = new ArrayList<IComponents>();
 
@@ -91,6 +95,7 @@ public class QueryItemPanel extends JPanel {
 
 		btnEdit = new JButton("編輯");
 		btnEdit.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				setEditMode(!isEditMode);
 			}
@@ -106,6 +111,8 @@ public class QueryItemPanel extends JPanel {
 		// TODO addActionListener{dao.delete(getQueryItem())}
 		panelTitleOperation.add(btnDelete);
 
+		
+		
 		panelContent = new JPanel();
 		add(panelContent, BorderLayout.CENTER);
 		panelContent.setLayout(new BorderLayout(0, 0));
@@ -127,13 +134,13 @@ public class QueryItemPanel extends JPanel {
 		panelInfo.add(horizontalBox);
 
 		jtfKindValue = new ComponentTextField();
-		jtfKindValue.setText("狗");
+		jtfKindValue.setText("");
 		jtfKindValue.setColumns(10);
 		components.add(jtfKindValue);
 		horizontalBox.add(jtfKindValue);
 
 		jtfVarietyValue = new ComponentTextField();
-		jtfVarietyValue.setText("混種狗");
+		jtfVarietyValue.setText("");
 		jtfVarietyValue.setColumns(10);
 		components.add(jtfVarietyValue);
 		horizontalBox.add(jtfVarietyValue);
@@ -150,7 +157,6 @@ public class QueryItemPanel extends JPanel {
 
 		btnGroupSex = new MyRadioGroup();
 		radioBtnMale = new JRadioButton("公");
-		radioBtnMale.setSelected(true);
 		horizontalBoxSex.add(radioBtnMale);
 		btnGroupSex.add(radioBtnMale);
 
@@ -166,11 +172,10 @@ public class QueryItemPanel extends JPanel {
 
 		panelInfo.add(new JSeparator());
 
-		jtfShelter = new ComponentTextField();
-		jtfShelter.setText("OX動物之家");
-		jtfShelter.setColumns(10);
-		components.add(jtfShelter);
-		panelInfo.add(jtfShelter);
+		cbxShelter = new MyComboBox<ShelterListItem>();
+		listShelter(MainFrame.getShelterList());
+		components.add(cbxShelter);
+		panelInfo.add(cbxShelter);
 
 	}
 
@@ -217,7 +222,16 @@ public class QueryItemPanel extends JPanel {
 	}
 
 	public void setShelter(String shelter_name) {
-		jtfShelter.setText(shelter_name);
+		//jtfShelter.setText(shelter_name);
+		cbxShelter.setSelectedItem(shelter_name);
 	}
-
+	
+	public void listShelter(List<ShelterDTO> shelterList) {
+		cbxShelter.removeAllItems();
+		if (shelterList != null && !shelterList.isEmpty()) {
+			for (ShelterDTO shelter : shelterList) {
+				cbxShelter.addItem(new ShelterListItem(shelter));
+			}
+		}
+	}
 }
