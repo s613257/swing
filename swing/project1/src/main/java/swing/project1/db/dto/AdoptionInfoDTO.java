@@ -243,4 +243,13 @@ public class AdoptionInfoDTO {
 		this.shelter_tel = shelter_tel;
 	}
 
+	public String getUpdateStament(){
+		// TODO 
+		return "";
+	}
+
+	public String getInsertStament(){
+		// TODO 
+		return "";
+	}
 }

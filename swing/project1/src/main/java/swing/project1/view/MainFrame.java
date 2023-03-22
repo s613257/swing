@@ -188,6 +188,7 @@ public class MainFrame extends JFrame {
 		qc.setKind(Integer.parseInt(btnGroupKind.getValue()));
 		qc.setSex(Integer.parseInt(btnGroupSex.getValue()));
 		qc.setShelterIdx(cbxShelter.getSelectedIndex());
+		qc.setShelterName((String)cbxShelter.getSelectedItem());
 		return qc;
 	}
 
