@@ -3,6 +3,8 @@ package swing.project1.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.Box;
@@ -27,6 +29,7 @@ public class QueryItemPanel extends JPanel {
 	private JLabel lblIdTitle;
 	private JLabel lblIdValue;
 	private JButton btnEdit;
+	private JButton btnSumit;
 	private JButton btnDelete;
 	private ImagePanel panelImg;
 	private JPanel panelInfo;
@@ -44,19 +47,18 @@ public class QueryItemPanel extends JPanel {
 	private ComponentTextField jtfShelter;
 
 	private ArrayList<IComponents> components;
-
+	private boolean isEditMode = false;
 	/**
 	 * Create the panel.
 	 */
 	public QueryItemPanel() {
-
 		initPanel();
-		setEnble(false);
+		setEditMode(isEditMode);
 	}
 
 	public QueryItemPanel(QueryItem data) {
 		initPanel();
-		setEnble(false);
+		setEditMode(isEditMode);
 
 		setImage(data.getAlbum_file());
 		setKind(data.getAnimal_kind());
@@ -88,9 +90,20 @@ public class QueryItemPanel extends JPanel {
 		panelTitle.add(panelTitleOperation, BorderLayout.EAST);
 
 		btnEdit = new JButton("編輯");
+		btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setEditMode(!isEditMode);
+			}
+		});
 		panelTitleOperation.add(btnEdit);
 
+		btnSumit = new JButton("送出");
+		btnSumit.setEnabled(false);
+		// TODO addActionListener{dao.update(getQueryItem())}
+		panelTitleOperation.add(btnSumit);
+
 		btnDelete = new JButton("刪除");
+		// TODO addActionListener{dao.delete(getQueryItem())}
 		panelTitleOperation.add(btnDelete);
 
 		panelContent = new JPanel();
@@ -167,6 +180,21 @@ public class QueryItemPanel extends JPanel {
 		}
 	}
 
+	public void setEditMode(boolean isEditMode){
+		this.isEditMode = isEditMode;
+		btnEdit.setEnabled(!isEditMode);
+		btnDelete.setEnabled(!isEditMode);
+		btnSumit.setEnabled(isEditMode);
+
+		panelImg.setEditable(isEditMode);
+		setEnble(isEditMode);
+	}
+
+	private QueryItem getQueryItem(){
+		QueryItem qi = new QueryItem(Integer.parseInt(lblIdValue.getText()));
+		// TODO 
+		return qi;
+	}
 	public void setImage(String album_file) {
 		panelImg.setImage(album_file);
 	}

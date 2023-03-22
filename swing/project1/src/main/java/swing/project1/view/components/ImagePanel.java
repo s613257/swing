@@ -1,23 +1,60 @@
 package swing.project1.view.components;
 
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class ImagePanel extends JPanel {
 	private final String DEFAULT_IMG = "./res/image/no_ima.jpg";
 	private BufferedImage image;
+	private boolean isEditable;
 
 	public ImagePanel() {
-		try {
-			// TODO
-			image = ImageIO.read(new File(DEFAULT_IMG));
-		} catch (IOException ex) {
+		isEditable = false;
+		setDefaultImg();
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (!isEditable) {
+					return;
+				}
+				setImage(JOptionPane.showInputDialog("請輸入圖片路徑"));
+			}
+		});
+	}
 
+	public void setEditable(boolean isEditable) {
+		this.isEditable = isEditable;
+	}
+
+	public void setImage(String url) {
+		try {
+			url = url.isEmpty() ? DEFAULT_IMG : url;
+			image = ImageIO.read(new File(url));
+		} catch (IOException e) {
+			e.printStackTrace();
+			setDefaultImg();
+		} finally {
+			revalidate();
+			repaint();
+		}
+	}
+
+	private void setDefaultImg() {
+		try {
+			image = ImageIO.read(new File(DEFAULT_IMG));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally {
+			revalidate();
+			repaint();
 		}
 	}
 
@@ -61,18 +98,6 @@ public class ImagePanel extends JPanel {
 			x2 = canvasWidth + x1;
 			y2 = canvasHeight + y1;
 		}
-
 		g.drawImage(image, x1, y1, x2, y2, 0, 0, imgWidth, imgHeight, null);
-	}
-
-	public void setImage(String url) {
-		try {
-			url = url.isEmpty() ? DEFAULT_IMG : url;
-			image = ImageIO.read(new File(url));
-			repaint();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }

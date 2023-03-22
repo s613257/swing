@@ -10,6 +10,10 @@ public class QueryItem {
 	String animal_sex;
 	String shelter_name;
 
+	public QueryItem(int animal_id) {
+		this.animal_id = animal_id;
+	}
+
 	public QueryItem(AdoptionInfoDTO aiDto) {
 		this.animal_id = aiDto.getAnimal_id();
 		setAlbum_file(aiDto.getAlbum_file());
