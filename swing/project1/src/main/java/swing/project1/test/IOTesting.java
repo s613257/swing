@@ -1,50 +1,43 @@
 package swing.project1.test;
 
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+import com.opencsv.exceptions.CsvValidationException;
 
 public class IOTesting {
 
-	    public static byte[] exportCSV(List<LinkedHashMap<String, Object>> exportData) {
-	        ByteArrayOutputStream out = new ByteArrayOutputStream();
-	        BufferedWriter buffCvsWriter = null;
-	        try {
-	        	buffCvsWriter = new BufferedWriter(buffCvsWriter);
-	            for (Iterator<LinkedHashMap<String, Object>> iterator = exportData.iterator(); iterator.hasNext(); ) {
-	                fillDataToCsv(buffCvsWriter, iterator.next());
-	                if (iterator.hasNext()) {
-	                    buffCvsWriter.newLine();
-	                }
-	            }
-	            buffCvsWriter.flush();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        } finally {
-	            if (buffCvsWriter != null) {
-	                try {
-	                    buffCvsWriter.close();
-	                } catch (IOException e) {
-	                    e.printStackTrace();
-	                }
-	            }
-	        }
-	        return out.toByteArray();
-	    }
+	public static void reader() {
 
-	    private static void fillDataToCsv(BufferedWriter buffCvsWriter, LinkedHashMap row) throws IOException {
-	        Map.Entry propertyEntry;
-	        for (Iterator<Map.Entry> propertyIterator = row.entrySet().iterator(); propertyIterator.hasNext(); ) {
-	            propertyEntry = propertyIterator.next();
-	            buffCvsWriter.write("\"" + propertyEntry.getValue().toString() + "\"");
-	            if (propertyIterator.hasNext()) {
-	                buffCvsWriter.write(",");
-	            }
-	        }
-	    }
+		try {
+			CSVReader rd = new CSVReader(new FileReader("File.csv"));
+			String[] nextLine = {};
+			while ((nextLine = rd.readNext()) != null) {
+				System.out.println(nextLine[0] + nextLine[1] + "\n");
+			}
+		} catch (IOException | CsvValidationException e) {
+			e.printStackTrace();
+		}
+
 	}
 
+	public static void writer() {
+		CSVWriter writer;
+		try {
+			writer = new CSVWriter(new FileWriter("File.csv"));
+			String[] entries1 = "data1,data2,data3".split(",");
+			String[] entries2 = { "data1", "data2", "data3" };
+			writer.writeNext(entries1);
+			writer.writeNext(entries2);
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		}
+	}
+
+}

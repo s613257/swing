@@ -19,10 +19,10 @@ public class DaoTesting {
 	}
 			
 	public static void testAdoptionInfoDAO() {
-		AdoptionInfoDAO sd = new AdoptionInfoDAOImpl();
-		List<AdoptionInfoDTO> adoptionList = sd.getAllAdoptionInfo();
-		for (AdoptionInfoDTO s : adoptionList) {
-			System.out.println(s.toString());
+		AdoptionInfoDAO aid = new AdoptionInfoDAOImpl();
+		List<AdoptionInfoDTO> adoptionList = aid.getAllAdoptionInfo();
+		for (AdoptionInfoDTO ai : adoptionList) {
+			System.out.println(ai.toString());
 		}
 	}
 
