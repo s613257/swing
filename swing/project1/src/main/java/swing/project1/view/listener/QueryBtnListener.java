@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import swing.project1.db.dto.AdoptionInfoDTO;
+import swing.project1.model.QueryCondition;
 import swing.project1.view.MainFrame;
 
 public class QueryBtnListener implements ActionListener{
@@ -20,7 +21,8 @@ public class QueryBtnListener implements ActionListener{
 	}
 	
 	private ArrayList<AdoptionInfoDTO> getQueryResult(){
-		// TODO parent.getQueryStatement();
+		QueryCondition qc = parent.getQueryCondition();
+		// TODO
 		ArrayList<AdoptionInfoDTO> queryItems = new ArrayList<AdoptionInfoDTO>();
 		AdoptionInfoDTO aid1 = new AdoptionInfoDTO();
 		aid1.setAlbum_file("");
