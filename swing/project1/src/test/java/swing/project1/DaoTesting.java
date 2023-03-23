@@ -1,4 +1,4 @@
-package swing.project1.test;
+package swing.project1;
 
 import java.util.List;
 
