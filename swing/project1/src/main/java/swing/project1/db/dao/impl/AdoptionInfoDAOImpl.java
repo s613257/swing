@@ -7,16 +7,19 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.PreparedStatement;
+
 import swing.project1.db.dao.AdoptionInfoDAO;
 import swing.project1.db.dao.impl.base.BaseDAO_MySql;
 import swing.project1.db.dto.AdoptionInfoDTO;
 import swing.project1.db.dto.ShelterDTO;
 
 public class AdoptionInfoDAOImpl extends BaseDAO_MySql implements AdoptionInfoDAO {
+	Connection conn = getConnection();
+
 	public List<AdoptionInfoDTO> getAllAdoptionInfo() {
 
 		List<AdoptionInfoDTO> resultList = new ArrayList<AdoptionInfoDTO>();
-		Connection conn = getConnection();
 		Statement st = null;
 		ResultSet rs = null;
 		try {
@@ -25,6 +28,7 @@ public class AdoptionInfoDAOImpl extends BaseDAO_MySql implements AdoptionInfoDA
 
 			while (rs.next()) {
 				resultList.add(new AdoptionInfoDTO(rs));
+
 			}
 
 		} catch (SQLException e) {

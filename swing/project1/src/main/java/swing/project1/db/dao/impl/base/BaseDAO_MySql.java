@@ -19,7 +19,7 @@ public class BaseDAO_MySql {
 		if (instance == null) {
 			try {
 				Properties props = new Properties();
-				FileInputStream fis = new FileInputStream("project1/db.properties");
+				FileInputStream fis = new FileInputStream("../project1/db.properties");
 				props.load(fis);
 				Class.forName(props.getProperty("MYSQL_DB_DRIVERCLASS"));
 				instance = DriverManager.getConnection(props.getProperty("MYSQL_DB_URL"),

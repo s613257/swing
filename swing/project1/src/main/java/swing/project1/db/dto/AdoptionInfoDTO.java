@@ -2,32 +2,23 @@ package swing.project1.db.dto;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Date;
+
+import com.mysql.jdbc.PreparedStatement;
 
 public class AdoptionInfoDTO {
 	int animal_id;
-	String animal_subid;
-	int animal_area_pkid;
 	int animal_shelter_pkid;
-	String animal_place;
 	String animal_kind;
 	String animal_Variety;
 	String animal_sex;
-	String animal_bodytype;
-	String animal_colour;
-	String animal_age;
-	String animal_sterilization;
-	String animal_bacterin;
-	String animal_opendate;
-	Date animal_closeddate;
 	String animal_update;
 	Date animal_createtime;
 	String shelter_name;
 	String album_file;
 	String album_update;
 	String cDate;
-	String shelter_address;
-	String shelter_tel;
 
 	public AdoptionInfoDTO() {
 
@@ -35,28 +26,16 @@ public class AdoptionInfoDTO {
 
 	public AdoptionInfoDTO(ResultSet rs) throws SQLException {
 		this.animal_id = rs.getInt("animal_id");
-		this.animal_subid = rs.getString("animal_subid");
-		this.animal_area_pkid = rs.getInt("animal_area_pkid");
 		this.animal_shelter_pkid = rs.getInt("animal_shelter_pkid");
-		this.animal_place = rs.getString("animal_place");
 		this.animal_kind = rs.getString("animal_kind");
 		this.animal_Variety = rs.getString("animal_Variety");
 		this.animal_sex = rs.getString("animal_sex");
-		this.animal_bodytype = rs.getString("animal_bodytype");
-		this.animal_colour = rs.getString("animal_colour");
-		this.animal_age = rs.getString("animal_age");
-		this.animal_sterilization = rs.getString("animal_sterilization");
-		this.animal_bacterin = rs.getString("animal_bacterin");
-		this.animal_opendate = rs.getString("animal_opendate");
-		this.animal_closeddate = rs.getDate("animal_closeddate");
 		this.animal_update = rs.getString("animal_update");
 		this.animal_createtime = rs.getDate("animal_createtime");
 		this.shelter_name = rs.getString("shelter_name");
 		this.album_file = rs.getString("album_file");
 		this.album_update = rs.getString("album_update");
 		this.cDate = rs.getString("cDate");
-		this.shelter_address = rs.getString("shelter_address");
-		this.shelter_tel = rs.getString("shelter_tel");
 	}
 
 	public int getAnimal_id() {
@@ -67,36 +46,12 @@ public class AdoptionInfoDTO {
 		this.animal_id = animal_id;
 	}
 
-	public String getAnimal_subid() {
-		return animal_subid;
-	}
-
-	public void setAnimal_subid(String animal_subid) {
-		this.animal_subid = animal_subid;
-	}
-
-	public int getAnimal_area_pkid() {
-		return animal_area_pkid;
-	}
-
-	public void setAnimal_area_pkid(int animal_area_pkid) {
-		this.animal_area_pkid = animal_area_pkid;
-	}
-
 	public int getAnimal_shelter_pkid() {
 		return animal_shelter_pkid;
 	}
 
 	public void setAnimal_shelter_pkid(int animal_shelter_pkid) {
 		this.animal_shelter_pkid = animal_shelter_pkid;
-	}
-
-	public String getAnimal_place() {
-		return animal_place;
-	}
-
-	public void setAnimal_place(String animal_place) {
-		this.animal_place = animal_place;
 	}
 
 	public String getAnimal_kind() {
@@ -121,62 +76,6 @@ public class AdoptionInfoDTO {
 
 	public void setAnimal_sex(String animal_sex) {
 		this.animal_sex = animal_sex;
-	}
-
-	public String getAnimal_bodytype() {
-		return animal_bodytype;
-	}
-
-	public void setAnimal_bodytype(String animal_bodytype) {
-		this.animal_bodytype = animal_bodytype;
-	}
-
-	public String getAnimal_colour() {
-		return animal_colour;
-	}
-
-	public void setAnimal_colour(String animal_colour) {
-		this.animal_colour = animal_colour;
-	}
-
-	public String getAnimal_age() {
-		return animal_age;
-	}
-
-	public void setAnimal_age(String animal_age) {
-		this.animal_age = animal_age;
-	}
-
-	public String getAnimal_sterilization() {
-		return animal_sterilization;
-	}
-
-	public void setAnimal_sterilization(String animal_sterilization) {
-		this.animal_sterilization = animal_sterilization;
-	}
-
-	public String getAnimal_bacterin() {
-		return animal_bacterin;
-	}
-
-	public void setAnimal_bacterin(String animal_bacterin) {
-		this.animal_bacterin = animal_bacterin;
-	}
-
-	public String getAnimal_opendate() {
-		return animal_opendate;
-	}
-
-	public void setAnimal_opendate(String animal_opendate) {
-		this.animal_opendate = animal_opendate;
-	}
-
-	public Date getAnimal_closeddate() {
-		return animal_closeddate;
-	}
-
-	public void setAnimal_closeddate(Date animal_closeddate) {
-		this.animal_closeddate = animal_closeddate;
 	}
 
 	public String getAnimal_update() {
@@ -227,42 +126,27 @@ public class AdoptionInfoDTO {
 		this.cDate = cDate;
 	}
 
-	public String getShelter_address() {
-		return shelter_address;
-	}
-
-	public void setShelter_address(String shelter_address) {
-		this.shelter_address = shelter_address;
-	}
-
-	public String getShelter_tel() {
-		return shelter_tel;
-	}
-
-	public void setShelter_tel(String shelter_tel) {
-		this.shelter_tel = shelter_tel;
-	}
-
 	@Override
 	public String toString() {
-		return "AdoptionInfoDTO [animal_id=" + animal_id + ", animal_subid=" + animal_subid + ", animal_area_pkid="
-				+ animal_area_pkid + ", animal_shelter_pkid=" + animal_shelter_pkid + ", animal_place=" + animal_place
+		return "AdoptionInfoDTO [animal_id=" + animal_id + ", animal_shelter_pkid=" + animal_shelter_pkid
 				+ ", animal_kind=" + animal_kind + ", animal_Variety=" + animal_Variety + ", animal_sex=" + animal_sex
-				+ ", animal_bodytype=" + animal_bodytype + ", animal_colour=" + animal_colour + ", animal_age="
-				+ animal_age + ", animal_sterilization=" + animal_sterilization + ", animal_bacterin=" + animal_bacterin
-				+ ", animal_opendate=" + animal_opendate + ", animal_closeddate=" + animal_closeddate
 				+ ", animal_update=" + animal_update + ", animal_createtime=" + animal_createtime + ", shelter_name="
 				+ shelter_name + ", album_file=" + album_file + ", album_update=" + album_update + ", cDate=" + cDate
-				+ ", shelter_address=" + shelter_address + ", shelter_tel=" + shelter_tel + "]";
+				+ "]";
 	}
 
-	public String getUpdateStament(){
-		// TODO 
-		return "";
+	public String getUpdateStament() {
+		// TODO
+//		String sql = "update t_adoption_info set shelter_name= ? where animal_id = ?";
+		return String.format("%s,%d",shelter_name,animal_id);
 	}
 
-	public String getInsertStament(){
-		// TODO 
-		return "";
+	public String getInsertStament() {
+		// TODO
+//		String sql = "insert into t_adoption_info values(?,?,?,?,?,?,?,?,?,?,?)";
+		return String.format("%d,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s)", animal_id,
+				animal_shelter_pkid, animal_kind, animal_Variety, animal_sex, animal_update, animal_createtime,
+				shelter_name, album_file, album_update, cDate);
+
 	}
 }

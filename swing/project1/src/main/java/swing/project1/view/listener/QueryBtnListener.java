@@ -25,6 +25,7 @@ public class QueryBtnListener implements ActionListener {
 		QueryCondition qc = parent.getQueryCondition();
 		String queryCmd = "SELECT * FROM AdoptionInfo" + qc.toWhereStatemant();
 		// TODO
+		
 		ArrayList<AdoptionInfoDTO> queryItems = new ArrayList<AdoptionInfoDTO>();
 		AdoptionInfoDTO aid1 = new AdoptionInfoDTO();
 		aid1.setAlbum_file("");

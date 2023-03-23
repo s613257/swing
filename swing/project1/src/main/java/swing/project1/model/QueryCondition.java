@@ -6,24 +6,30 @@ public class QueryCondition {
 	int sex; // 0: 公; 1:母; 2:不限
 	int shelterIdx; // 收容所清單索引
 	String shelterName;
-	public QueryCondition(){
+
+	public QueryCondition() {
 	}
 
 	public int getKind() {
 		return kind;
 	}
+
 	public void setKind(int kind) {
 		this.kind = kind;
 	}
+
 	public int getSex() {
 		return sex;
 	}
+
 	public void setSex(int sex) {
 		this.sex = sex;
 	}
+
 	public int getShelterIdx() {
 		return shelterIdx;
 	}
+
 	public void setShelterIdx(int shelterIdx) {
 		this.shelterIdx = shelterIdx;
 	}
@@ -31,80 +37,96 @@ public class QueryCondition {
 	public String getShelterName() {
 		return shelterName;
 	}
+
 	public void setShelterName(String shelterName) {
 		this.shelterName = shelterName;
 	}
 
-	public String toWhereStatemant(){
+	public String toWhereStatemant() {
 		// TODO
 		StringBuffer sb = new StringBuffer();
 		boolean withCondition = false;
-		if(kind < KindType.ALL.getValue()){
+		if (kind < KindType.ALL.getValue()) {
 			withCondition = true;
-//			switch(KindType.values()[kind]) {
-//			case CAT:
-//				// TODO sb.append("");
-//				break;
-//			case DOG:
-//				// TODO
-//				break;
-//			case OTHER:
-//				// TODO
-//				break;
-//			default:
-//				break;
-//			}
+			switch (KindType.values()[kind]) {
+			case CAT:
+				sb.append("貓");
+				break;
+			case DOG:
+				sb.append("狗");
+				break;
+			case OTHER:
+				sb.append("其他");
+				break;
+			default:
+				break;
+			}
 		}
 
-		if(sex < SexType.ALL.getValue()){
-			if(withCondition) {
+		if (sex < SexType.ALL.getValue()) {
+			if (withCondition) {
 				sb.append(" AND ");
-			}else {
+			} else {
 				withCondition = true;
 			}
-			
+			switch (SexType.values()[sex]) {
+			case Male:
+				sb.append("公");
+				break;
+			case Female:
+				sb.append("母");
+				break;
+			default:
+				break;
+			}
 
 		}
 
-		if(shelterIdx > 0){ // Not 0(不限)
-			if(withCondition) {
+		if (shelterIdx > 0) { // Not 0(不限)
+			if (withCondition) {
 				sb.append(" AND ");
-			}else {
+			} else {
 				withCondition = true;
 			}
 			sb.append(String.format("'%s'", this.shelterName));
 		}
 		sb.append(";");
-		String resultStr = withCondition? (" WHERE " + sb.toString()):sb.toString();
+		String resultStr = withCondition ? (" WHERE " + sb.toString()) : sb.toString();
 		return resultStr;
 	}
 
 }
 
-enum KindType{
+enum KindType {
 	CAT(0, "貓"), DOG(1, "狗"), OTHER(2, "其他"), ALL(3, "不限");
+
 	private int value;
 	private String name;
-	KindType(int value, String name){
+
+	KindType(int value, String name) {
 		this.value = value;
 		this.name = name;
 	}
-	public int getValue(){
+
+	public int getValue() {
 		return this.value;
 	}
+
 	public String getName() {
 		return this.name;
 	}
 }
 
-
-enum SexType{
+enum SexType {
 	Male(0), Female(1), ALL(2);
+
 	private int value;
-	SexType(int value){
+
+	SexType(int value) {
 		this.value = value;
 	}
-	public int getValue(){
+
+	public int getValue() {
 		return this.value;
 	}
 }
