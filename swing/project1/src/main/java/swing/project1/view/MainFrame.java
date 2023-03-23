@@ -3,11 +3,13 @@ package swing.project1.view;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -51,6 +53,8 @@ public class MainFrame extends JFrame {
 	MyRadioButton radioBtnAllSex;
 	// Sheelter
 	private MyComboBox<ShelterListItem> cbxShelter;
+	
+	static JDialog jd;
 
 	/**
 	 * Create the frame.
@@ -68,9 +72,18 @@ public class MainFrame extends JFrame {
 		menuBar.add(mnNewMenu);
 
 		JMenuItem mntmNew1Record = new JMenuItem("新增單筆資料");
+		jd = new JDialog(this);
+		jd.setBounds(200, 200, 400, 500);
+		jd.add(new InsertItemPanel());
+        mntmNew1Record.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jd.setVisible(true);
+            }
+        });
 		mnNewMenu.add(mntmNew1Record);
-
 		JMenuItem mntmImportRecords = new JMenuItem("匯入資料");
+		// TODO
 		mnNewMenu.add(mntmImportRecords);
 
 		JMenuItem mntmExportResult = new JMenuItem("匯出查詢結果");
@@ -98,7 +111,7 @@ public class MainFrame extends JFrame {
 
 		btnGroupKind = new MyRadioGroup();
 		radioBtnCat = new MyRadioButton("貓", 0);
-
+		radioBtnCat.setSelected(true);
 		horizontalBoxType.add(radioBtnCat);
 		btnGroupKind.add(radioBtnCat);
 
@@ -123,6 +136,7 @@ public class MainFrame extends JFrame {
 
 		btnGroupSex = new MyRadioGroup();
 		radioBtnMale = new MyRadioButton("公", 0);
+		radioBtnMale.setSelected(true);
 		horizontalBoxSex.add(radioBtnMale);
 		btnGroupSex.add(radioBtnMale);
 
@@ -161,7 +175,7 @@ public class MainFrame extends JFrame {
 		panelQueryResultList.setLayout(new GridLayout(0, 4, 0, 0));
 	}
 
-	public void showQueryResult(ArrayList<AdoptionInfoDTO> queryItems) {
+	public void showQueryResult(List<AdoptionInfoDTO> queryItems) {
 		panelQueryResultList.removeAll();
 		for (int i = 0; i < queryItems.size(); i++) {
 			panelQueryResultList.add(new QueryItemPanel(new QueryItem(queryItems.get(i))));
@@ -188,8 +202,8 @@ public class MainFrame extends JFrame {
 		QueryCondition qc = new QueryCondition();
 		qc.setKind(Integer.parseInt(btnGroupKind.getValue()));
 		qc.setSex(Integer.parseInt(btnGroupSex.getValue()));
-		qc.setShelterIdx(((ShelterListItem)cbxShelter.getSelectedItem()).getShelter_pkid());
-		qc.setShelterName(((ShelterListItem)cbxShelter.getSelectedItem()).getShelter_name());
+		qc.setShelterIdx(((ShelterListItem) cbxShelter.getSelectedItem()).getShelter_pkid());
+		qc.setShelterName(((ShelterListItem) cbxShelter.getSelectedItem()).getShelter_name());
 		return qc;
 	}
 

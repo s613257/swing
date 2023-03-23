@@ -6,10 +6,12 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ImagePanel extends JPanel {
 	private final String DEFAULT_IMG = "./res/image/no_ima.jpg";
@@ -20,18 +22,29 @@ public class ImagePanel extends JPanel {
 		isEditable = false;
 		setDefaultImg();
 		addMouseListener(new MouseAdapter() {
+			private ImagePanel parent;
+
+			public MouseAdapter init(ImagePanel parent) {
+				this.parent = parent;
+				return this;
+			}
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (!isEditable) {
 					return;
 				}
-				String url = JOptionPane.showInputDialog("請輸入圖片路徑"); // TODO Change to select file
-				if(url == null || url.isEmpty()) {
-					return;
+				JFileChooser fileChooser = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("圖片", "jpg", "jpeg", "png");
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				fileChooser.setFileFilter(filter);
+				int option = fileChooser.showOpenDialog(parent);
+				if (option == JFileChooser.APPROVE_OPTION) {
+					File file = fileChooser.getSelectedFile();
+					setImage(file);
 				}
-				setImage(url);
 			}
-		});
+		}.init(this));
 	}
 
 	public void setEditable(boolean isEditable) {
@@ -39,9 +52,28 @@ public class ImagePanel extends JPanel {
 	}
 
 	public void setImage(String url) {
+		url = (url == null || url.isEmpty()) ? DEFAULT_IMG : url;
+		if(url.startsWith("http")) {
+			showImage(url);
+		}else {
+			setImage(new File(url));	
+		}
+		
+	}
+	
+	private void showImage(String path) {
+		 try {
+			URL url = new URL(path);
+			image = ImageIO.read(url);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void setImage(File f) {
 		try {
-			url = (url == null || url.isEmpty()) ? DEFAULT_IMG : url;
-			image = ImageIO.read(new File(url));
+			image = ImageIO.read(f);
 		} catch (IOException e) {
 			e.printStackTrace();
 			setDefaultImg();

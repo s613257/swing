@@ -50,13 +50,12 @@ public class QueryCondition {
 			withCondition = true;
 			switch (KindType.values()[kind]) {
 			case CAT:
-				sb.append("貓");
+				sb.append("animal_kind = '貓'");
 				break;
 			case DOG:
 				sb.append("狗");
 				break;
 			case OTHER:
-				sb.append("其他");
 				break;
 			default:
 				break;
@@ -71,7 +70,7 @@ public class QueryCondition {
 			}
 			switch (SexType.values()[sex]) {
 			case Male:
-				sb.append("公");
+				sb.append("animal_sex = 'M'");
 				break;
 			case Female:
 				sb.append("母");
@@ -88,7 +87,7 @@ public class QueryCondition {
 			} else {
 				withCondition = true;
 			}
-			sb.append(String.format("'%s'", this.shelterName));
+			sb.append(String.format("shelter_name = '%s'", this.shelterName));
 		}
 		sb.append(";");
 		String resultStr = withCondition ? (" WHERE " + sb.toString()) : sb.toString();
@@ -118,6 +117,7 @@ enum KindType {
 }
 
 enum SexType {
+	// TODO
 	Male(0), Female(1), ALL(2);
 
 	private int value;

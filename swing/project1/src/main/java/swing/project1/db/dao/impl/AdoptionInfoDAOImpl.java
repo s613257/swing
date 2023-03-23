@@ -7,37 +7,41 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.jdbc.PreparedStatement;
-
 import swing.project1.db.dao.AdoptionInfoDAO;
 import swing.project1.db.dao.impl.base.BaseDAO_MySql;
 import swing.project1.db.dto.AdoptionInfoDTO;
-import swing.project1.db.dto.ShelterDTO;
+import swing.project1.model.QueryCondition;
 
 public class AdoptionInfoDAOImpl extends BaseDAO_MySql implements AdoptionInfoDAO {
 	Connection conn = getConnection();
 
+	@Override
 	public List<AdoptionInfoDTO> getAllAdoptionInfo() {
+		return getInfoBySql("Select * From t_adoption_info  limit 7");
+	}
 
+	@Override
+	public List<AdoptionInfoDTO> getInfoByCondition(QueryCondition qc) {
+		String queryCmd = "SELECT * FROM t_adoption_info" + qc.toWhereStatemant();
+		return getInfoBySql(queryCmd);
+	}
+	
+	private List<AdoptionInfoDTO> getInfoBySql(String sql) {
 		List<AdoptionInfoDTO> resultList = new ArrayList<AdoptionInfoDTO>();
 		Statement st = null;
 		ResultSet rs = null;
 		try {
 			st = conn.createStatement();
-			rs = st.executeQuery("Select * From t_adoption_info  limit 7");
-
+			rs = st.executeQuery(sql);
 			while (rs.next()) {
 				resultList.add(new AdoptionInfoDTO(rs));
-
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			closeAll(st, rs);
 		}
 		return resultList;
-
 	}
 
 }

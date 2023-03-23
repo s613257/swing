@@ -2,10 +2,7 @@ package swing.project1.db.dto;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Date;
-
-import com.mysql.jdbc.PreparedStatement;
 
 public class AdoptionInfoDTO {
 	int animal_id;
@@ -21,7 +18,7 @@ public class AdoptionInfoDTO {
 	String cDate;
 
 	public AdoptionInfoDTO() {
-
+		animal_id = 0;
 	}
 
 	public AdoptionInfoDTO(ResultSet rs) throws SQLException {
@@ -136,9 +133,9 @@ public class AdoptionInfoDTO {
 	}
 
 	public String getUpdateStament() {
-		// TODO
-//		String sql = "update t_adoption_info set shelter_name= ? where animal_id = ?";
-		return String.format("%s,%d",shelter_name,animal_id);
+		return String.format("update t_adoption_info set shelter_name= '%s' where animal_id = %d",
+				shelter_name,
+				animal_id);
 	}
 
 	public String getInsertStament() {
