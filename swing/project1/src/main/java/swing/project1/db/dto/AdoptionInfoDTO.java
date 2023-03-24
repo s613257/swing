@@ -133,15 +133,12 @@ public class AdoptionInfoDTO {
 	}
 
 	public String getUpdateStament() {
-		return String.format("update t_adoption_info set shelter_name= '%s' where animal_id = %d",
-				shelter_name,
+		return String.format("update t_adoption_info set shelter_name= '%s' where animal_id = %d", shelter_name,
 				animal_id);
 	}
 
 	public String getInsertStament() {
-		// TODO
-//		String sql = "insert into t_adoption_info values(?,?,?,?,?,?,?,?,?,?,?)";
-		return String.format("%d,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s)", animal_id,
+		return String.format("insert into t_adoption_info values(%d,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s)", animal_id,
 				animal_shelter_pkid, animal_kind, animal_Variety, animal_sex, animal_update, animal_createtime,
 				shelter_name, album_file, album_update, cDate);
 

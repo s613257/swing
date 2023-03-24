@@ -5,11 +5,14 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -19,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import swing.project1.db.dao.ShelterDAO;
 import swing.project1.db.dao.impl.ShelterDAOImpl;
@@ -53,7 +57,7 @@ public class MainFrame extends JFrame {
 	MyRadioButton radioBtnAllSex;
 	// Sheelter
 	private MyComboBox<ShelterListItem> cbxShelter;
-	
+
 	static JDialog jd;
 
 	/**
@@ -75,15 +79,27 @@ public class MainFrame extends JFrame {
 		jd = new JDialog(this);
 		jd.setBounds(200, 200, 400, 500);
 		jd.add(new InsertItemPanel());
-        mntmNew1Record.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                jd.setVisible(true);
-            }
-        });
+		mntmNew1Record.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				jd.setVisible(true);
+			}
+		});
 		mnNewMenu.add(mntmNew1Record);
+
 		JMenuItem mntmImportRecords = new JMenuItem("匯入資料");
 		// TODO
+		
+		public void actionPerformed(ActionEvent ae) {
+			JFileChooser fileChooser = new JFileChooser();
+			int returnValue = fileChooser.showOpenDialog(null);
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+				File selectedFile = fileChooser.getSelectedFile();
+				File file = fileChooser.getSelectedFile();
+				set(file);
+			}
+		}
+		
 		mnNewMenu.add(mntmImportRecords);
 
 		JMenuItem mntmExportResult = new JMenuItem("匯出查詢結果");

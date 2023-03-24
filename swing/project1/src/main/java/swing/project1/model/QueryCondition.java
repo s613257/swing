@@ -53,9 +53,10 @@ public class QueryCondition {
 				sb.append("animal_kind = '貓'");
 				break;
 			case DOG:
-				sb.append("狗");
+				sb.append("animal_kind = '狗'");
 				break;
 			case OTHER:
+				sb.append("animal_kind = '其他'");
 				break;
 			default:
 				break;
@@ -73,7 +74,7 @@ public class QueryCondition {
 				sb.append("animal_sex = 'M'");
 				break;
 			case Female:
-				sb.append("母");
+				sb.append("animal_sex = 'F'");
 				break;
 			default:
 				break;
@@ -118,15 +119,20 @@ enum KindType {
 
 enum SexType {
 	// TODO
-	Male(0), Female(1), ALL(2);
+	Male(0,"M"), Female(1,"F"), ALL(2,"不限");
 
 	private int value;
+	private String sex;
 
-	SexType(int value) {
+	SexType(int value, String sex) {
 		this.value = value;
+		this.sex = sex;
 	}
 
 	public int getValue() {
 		return this.value;
+	}
+	public String getSex() {
+		return this.sex;
 	}
 }
