@@ -10,7 +10,6 @@ import java.util.List;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -27,6 +26,8 @@ import swing.project1.view.components.MyComboBox;
 import swing.project1.view.components.MyRadioGroup;
 
 public class InsertItemPanel extends JPanel {
+	private JDialog parent;
+	
 	private JPanel panelTitle;
 	private JPanel panelContent;
 	private JLabel lblIdTitle;
@@ -51,7 +52,8 @@ public class InsertItemPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public InsertItemPanel() {
+	public InsertItemPanel(JDialog parent) {
+		this.parent = parent;
 		initPanel();
 	}
 
@@ -78,27 +80,21 @@ public class InsertItemPanel extends JPanel {
 
 		btnSumit = new JButton("新增");
 		// TODO addActionListener{dao.update(getQueryItem())}
-		
 		panelTitleOperation.add(btnSumit);
+		
 		
 
 		btnCancel = new JButton("取消");
 		panelTitleOperation.add(btnCancel);
 		// TODO addActionListener{dao.delete(getQueryItem())}
-		JFrame jFrame = new JFrame();
-		final JDialog jd = new JDialog(jFrame);
+				
 		btnCancel.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				jd.setVisible(false);
+				parent.setVisible(false);
 			}
 		});
 		
-		
-
-		jd.add(btnCancel);
-		jd.setVisible(true);
-
 		panelContent = new JPanel();
 		add(panelContent, BorderLayout.CENTER);
 		panelContent.setLayout(new BorderLayout(0, 0));

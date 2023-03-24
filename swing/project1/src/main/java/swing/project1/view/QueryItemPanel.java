@@ -18,7 +18,10 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+import swing.project1.db.dao.AdoptionInfoDAO;
+import swing.project1.db.dao.impl.AdoptionInfoDAOImpl;
 import swing.project1.db.dto.ShelterDTO;
+import swing.project1.model.QueryCondition;
 import swing.project1.model.QueryItem;
 import swing.project1.model.ShelterListItem;
 import swing.project1.view.components.ComponentTextField;
@@ -28,6 +31,8 @@ import swing.project1.view.components.MyRadioGroup;
 import swing.project1.view.components.intface.IComponents;
 
 public class QueryItemPanel extends JPanel {
+	private MainFrame parent;
+
 	private JPanel panelTitle;
 	private JPanel panelContent;
 	private JLabel lblIdTitle;
@@ -56,18 +61,22 @@ public class QueryItemPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public QueryItemPanel() {
+	public QueryItemPanel(MainFrame parent) {
+		this.parent = parent;
 		initPanel();
 		setEditMode(isEditMode);
 	}
 
-	public QueryItemPanel(QueryItem data) {
+	public QueryItemPanel(MainFrame parent, QueryItem data) {
+		this.parent = parent;
+
 		initPanel();
 		setEditMode(isEditMode);
+		this.lblIdValue.setText(Integer.toString(data.getAnimal_id()));
 
-		setImage(data.getAlbum_file());
-		setKind(data.getAnimal_kind());
-		setVariety(data.getAnimal_Variety());
+		setImage(data.getAlbum_file().trim());
+		setKind(data.getAnimal_kind().trim());
+		setVariety(data.getAnimal_Variety().trim());
 		setSex(data.getAnimal_sex());
 		setShelter(data.getShelter_name());
 	}
@@ -91,6 +100,7 @@ public class QueryItemPanel extends JPanel {
 
 		lblIdValue = new JLabel("000000");
 		panelTitleInfo.add(lblIdValue);
+
 		JPanel panelTitleOperation = new JPanel();
 		panelTitle.add(panelTitleOperation, BorderLayout.EAST);
 
@@ -109,7 +119,13 @@ public class QueryItemPanel extends JPanel {
 		btnSumit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setEditMode(isEditMode);
+				// 1. update current record
+				// 2. refresh query result
+				AdoptionInfoDAO aid = new AdoptionInfoDAOImpl();
+				aid.updateByQueryItem(getQueryItem());
+
+				QueryCondition qc = parent.getQueryCondition();
+				parent.showQueryResult(aid.getInfoByCondition(qc));
 			}
 		});
 		panelTitleOperation.add(btnSumit);
@@ -119,7 +135,13 @@ public class QueryItemPanel extends JPanel {
 		btnDelete.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setEditMode(isEditMode);
+				// 1. delete current record
+				// 2. refresh query result
+				AdoptionInfoDAO aid = new AdoptionInfoDAOImpl();
+				aid.deleteById(lblIdValue.getText());
+
+				QueryCondition qc = parent.getQueryCondition();
+				parent.showQueryResult(aid.getInfoByCondition(qc));
 			}
 		});
 		panelTitleOperation.add(btnDelete);
@@ -199,7 +221,7 @@ public class QueryItemPanel extends JPanel {
 	public void setEditMode(boolean isEditMode) {
 		this.isEditMode = isEditMode;
 		btnEdit.setEnabled(!isEditMode);
-		btnDelete.setEnabled(!isEditMode);
+		btnDelete.setEnabled(isEditMode);
 		btnSumit.setEnabled(isEditMode);
 
 		panelImg.setEditable(isEditMode);
@@ -208,7 +230,11 @@ public class QueryItemPanel extends JPanel {
 
 	private QueryItem getQueryItem() {
 		QueryItem qi = new QueryItem(Integer.parseInt(lblIdValue.getText()));
-		// TODO
+		qi.setAnimal_kind(jtfKindValue.getText());
+		qi.setAnimal_Variety(jtfVarietyValue.getText());
+		qi.setAnimal_sex(btnGroupSex.getText().equals("公") ? "M" : "F");
+		qi.setAlbum_file(panelImg.getCurrImgPath()); // TODO V
+		qi.setShelter_name(cbxShelter.getText());
 		return qi;
 	}
 

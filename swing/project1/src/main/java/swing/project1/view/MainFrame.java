@@ -5,9 +5,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
@@ -32,7 +31,6 @@ import swing.project1.db.dto.ShelterDTO;
 import swing.project1.model.QueryCondition;
 import swing.project1.model.QueryItem;
 import swing.project1.model.ShelterListItem;
-import swing.project1.view.components.ImagePanel;
 import swing.project1.view.components.MyComboBox;
 import swing.project1.view.components.MyRadioButton;
 import swing.project1.view.components.MyRadioGroup;
@@ -42,6 +40,7 @@ public class MainFrame extends JFrame {
 
 	private JPanel contentPane;
 	private JPanel panelQueryResultList;
+	private static List<AdoptionInfoDTO> currQueryItems;
 
 	private static List<ShelterDTO> shelterList = null;
 
@@ -80,7 +79,7 @@ public class MainFrame extends JFrame {
 		JMenuItem mntmNew1Record = new JMenuItem("新增單筆資料");
 		jd = new JDialog(this);
 		jd.setBounds(200, 200, 400, 500);
-		jd.add(new InsertItemPanel());
+		jd.add(new InsertItemPanel(jd));
 		mntmNew1Record.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -91,21 +90,24 @@ public class MainFrame extends JFrame {
 
 		JMenuItem mntmImportRecords = new JMenuItem("匯入資料");
 		// TODO
-		addMouseListener(new MouseAdapter() {
+		mntmImportRecords.addActionListener(new ActionListener() {
 			private MainFrame parent;
 
-			public MouseAdapter init(MainFrame parent) {
+			public ActionListener init(MainFrame parent) {
 				this.parent = parent;
 				return this;
 			}
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("檔案", "csv", "json", "xml");
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				fileChooser.setFileFilter(filter);
 				int option = fileChooser.showOpenDialog(parent);
 				if (option == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
-
+					// TODO
 				}
 			}
 		}.init(this));
@@ -114,6 +116,7 @@ public class MainFrame extends JFrame {
 
 		JMenuItem mntmExportResult = new JMenuItem("匯出查詢結果");
 		mnNewMenu.add(mntmExportResult);
+		// addMouseListener(new MouseAdapter() {...currQueryItems...});
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -199,12 +202,16 @@ public class MainFrame extends JFrame {
 		panelQueryResultList = new JPanel();
 		panelQueryResult.add(panelQueryResultList);
 		panelQueryResultList.setLayout(new GridLayout(0, 4, 0, 0));
+		
+		currQueryItems = new ArrayList<AdoptionInfoDTO>();
 	}
 
 	public void showQueryResult(List<AdoptionInfoDTO> queryItems) {
+		currQueryItems.clear();
 		panelQueryResultList.removeAll();
 		for (int i = 0; i < queryItems.size(); i++) {
-			panelQueryResultList.add(new QueryItemPanel(new QueryItem(queryItems.get(i))));
+			currQueryItems.add(queryItems.get(i));
+			panelQueryResultList.add(new QueryItemPanel(this, new QueryItem(queryItems.get(i))));
 			if (i >= 7) {
 				break;
 			}

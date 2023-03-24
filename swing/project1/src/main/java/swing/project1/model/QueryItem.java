@@ -16,11 +16,11 @@ public class QueryItem {
 
 	public QueryItem(AdoptionInfoDTO aiDto) {
 		this.animal_id = aiDto.getAnimal_id();
-		setAlbum_file(aiDto.getAlbum_file());
-		setAnimal_kind(aiDto.getAnimal_kind());
-		setAnimal_Variety(aiDto.getAnimal_Variety());
-		setAnimal_sex(aiDto.getAnimal_sex());
-		setShelter_name(aiDto.getShelter_name());
+		setAlbum_file(aiDto.getAlbum_file().trim());
+		setAnimal_kind(aiDto.getAnimal_kind().trim());
+		setAnimal_Variety(aiDto.getAnimal_Variety().trim());
+		setAnimal_sex(aiDto.getAnimal_sex().trim());
+		setShelter_name(aiDto.getShelter_name().trim());
 	}
 
 	public int getAnimal_id() {
@@ -67,4 +67,9 @@ public class QueryItem {
 		this.shelter_name = shelter_name;
 	}
 
+	public String getUpdateSqlCmd() {
+		return String.format(
+				"UPDATE t_adoption_info SET album_file = '%s',  animal_kind = '%s',  animal_Variety = '%s',  animal_sex = '%s',  shelter_name = '%s' WHERE animal_id = %d",
+				album_file, animal_kind, animal_Variety, animal_sex, shelter_name, animal_id);
+	}
 }

@@ -11,6 +11,7 @@ import swing.project1.db.dao.AdoptionInfoDAO;
 import swing.project1.db.dao.impl.base.BaseDAO_MySql;
 import swing.project1.db.dto.AdoptionInfoDTO;
 import swing.project1.model.QueryCondition;
+import swing.project1.model.QueryItem;
 
 public class AdoptionInfoDAOImpl extends BaseDAO_MySql implements AdoptionInfoDAO {
 	Connection conn = getConnection();
@@ -22,8 +23,19 @@ public class AdoptionInfoDAOImpl extends BaseDAO_MySql implements AdoptionInfoDA
 
 	@Override
 	public List<AdoptionInfoDTO> getInfoByCondition(QueryCondition qc) {
-		String queryCmd = "SELECT * FROM t_adoption_info" + qc.toWhereStatemant();
-		return getInfoBySql(queryCmd);
+		return getInfoBySql(String.format("SELECT * FROM t_adoption_info%s", qc.toWhereStatemant()));
+	}
+	
+	@Override
+	public int updateByQueryItem(QueryItem dataSource) {
+		String sql = dataSource.getUpdateSqlCmd();
+		System.out.println(sql);
+		return executeUpdate(sql);
+	}
+	
+	@Override
+	public int deleteById(String animal_id) {
+		return executeUpdate(String.format("DELETE FROM t_adoption_info WHERE animal_id = %s;", animal_id));
 	}
 	
 	private List<AdoptionInfoDTO> getInfoBySql(String sql) {
@@ -43,5 +55,18 @@ public class AdoptionInfoDAOImpl extends BaseDAO_MySql implements AdoptionInfoDA
 		}
 		return resultList;
 	}
-
+	
+	private int executeUpdate(String sql) {
+		Statement st = null;
+		int effectRow = 0;
+		try {
+			st = conn.createStatement();
+			effectRow = st.executeUpdate(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeAll(st, null);
+		}
+		return effectRow;
+	}
 }

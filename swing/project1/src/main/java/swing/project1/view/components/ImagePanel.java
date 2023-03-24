@@ -16,6 +16,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class ImagePanel extends JPanel {
 	private final String DEFAULT_IMG = "./res/image/no_ima.jpg";
 	private BufferedImage image;
+	private String currentImgPath;
 	private boolean isEditable;
 
 	public ImagePanel() {
@@ -41,7 +42,7 @@ public class ImagePanel extends JPanel {
 				int option = fileChooser.showOpenDialog(parent);
 				if (option == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
-					setImage(file);
+					showLocalImage(file);
 				}
 			}
 		}.init(this));
@@ -54,25 +55,34 @@ public class ImagePanel extends JPanel {
 	public void setImage(String url) {
 		url = (url == null || url.isEmpty()) ? DEFAULT_IMG : url;
 		if(url.startsWith("http")) {
-			showImage(url);
+			//showLocalImage(new File(DEFAULT_IMG));
+			showOnlineImage(url);
 		}else {
-			setImage(new File(url));	
+			showLocalImage(new File(url));
 		}
-		
 	}
 	
-	private void showImage(String path) {
+	public String getCurrImgPath() {
+		return currentImgPath;
+	}
+	
+	private void showOnlineImage(String url) {
 		 try {
-			URL url = new URL(path);
-			image = ImageIO.read(url);
+			currentImgPath = url;
+			URL uri = new URL(url);
+			image = ImageIO.read(uri);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			revalidate();
+			repaint();
 		}
 	}
 	
-	private void setImage(File f) {
+	private void showLocalImage(File f) {
 		try {
+			currentImgPath = f.getPath();
 			image = ImageIO.read(f);
 		} catch (IOException e) {
 			e.printStackTrace();

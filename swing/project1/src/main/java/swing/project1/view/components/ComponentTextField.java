@@ -6,18 +6,19 @@ import swing.project1.view.components.intface.IComponents;
 
 public class ComponentTextField extends JTextField implements IComponents {
 
+	@Override
 	public void setEnable(boolean isEnable) {
 		setEnabled(isEnable);
 	}
 
 	@Override
 	public String getText() {
-
-		return getText();
+		return super.getText();
 	}
 
+	@Override
 	public String getValue() {
-		return getText();
+		return super.getText();
 	}
 
 }

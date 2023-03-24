@@ -2,6 +2,7 @@ package swing.project1.view.components;
 
 import javax.swing.JComboBox;
 
+import swing.project1.db.dto.ShelterDTO;
 import swing.project1.view.components.intface.IComponents;
 
 public class MyComboBox<E> extends JComboBox<E> implements IComponents {
@@ -18,7 +19,7 @@ public class MyComboBox<E> extends JComboBox<E> implements IComponents {
 
 	@Override
 	public String getText() {
-		return (String)getSelectedItem();
+		return ((ShelterDTO)getSelectedItem()).getShelter_name();
 	}
 	
 	
