@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.List;
@@ -31,6 +32,7 @@ import swing.project1.db.dto.ShelterDTO;
 import swing.project1.model.QueryCondition;
 import swing.project1.model.QueryItem;
 import swing.project1.model.ShelterListItem;
+import swing.project1.view.components.ImagePanel;
 import swing.project1.view.components.MyComboBox;
 import swing.project1.view.components.MyRadioButton;
 import swing.project1.view.components.MyRadioGroup;
@@ -89,17 +91,25 @@ public class MainFrame extends JFrame {
 
 		JMenuItem mntmImportRecords = new JMenuItem("匯入資料");
 		// TODO
-		
-		public void actionPerformed(ActionEvent ae) {
-			JFileChooser fileChooser = new JFileChooser();
-			int returnValue = fileChooser.showOpenDialog(null);
-			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				File selectedFile = fileChooser.getSelectedFile();
-				File file = fileChooser.getSelectedFile();
-				set(file);
+		addMouseListener(new MouseAdapter() {
+			private MainFrame parent;
+
+			public MouseAdapter init(MainFrame parent) {
+				this.parent = parent;
+				return this;
 			}
-		}
-		
+
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int option = fileChooser.showOpenDialog(parent);
+				if (option == JFileChooser.APPROVE_OPTION) {
+					File file = fileChooser.getSelectedFile();
+
+				}
+			}
+		}.init(this));
+
 		mnNewMenu.add(mntmImportRecords);
 
 		JMenuItem mntmExportResult = new JMenuItem("匯出查詢結果");

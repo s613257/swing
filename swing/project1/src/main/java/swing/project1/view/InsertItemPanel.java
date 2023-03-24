@@ -3,10 +3,14 @@ package swing.project1.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -51,7 +55,6 @@ public class InsertItemPanel extends JPanel {
 		initPanel();
 	}
 
-
 	private void initPanel() {
 		setBounds(0, 0, 295, 300);
 		setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -73,17 +76,29 @@ public class InsertItemPanel extends JPanel {
 		JPanel panelTitleOperation = new JPanel();
 		panelTitle.add(panelTitleOperation, BorderLayout.EAST);
 
-
 		btnSumit = new JButton("新增");
 		// TODO addActionListener{dao.update(getQueryItem())}
+		
 		panelTitleOperation.add(btnSumit);
+		
 
 		btnCancel = new JButton("取消");
-		// TODO addActionListener{dao.delete(getQueryItem())}
 		panelTitleOperation.add(btnCancel);
+		// TODO addActionListener{dao.delete(getQueryItem())}
+		JFrame jFrame = new JFrame();
+		final JDialog jd = new JDialog(jFrame);
+		btnCancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				jd.setVisible(false);
+			}
+		});
+		
+		
 
-		
-		
+		jd.add(btnCancel);
+		jd.setVisible(true);
+
 		panelContent = new JPanel();
 		add(panelContent, BorderLayout.CENTER);
 		panelContent.setLayout(new BorderLayout(0, 0));
@@ -134,7 +149,6 @@ public class InsertItemPanel extends JPanel {
 		horizontalBoxSex.add(radioBtnFemale);
 		btnGroupSex.add(radioBtnFemale);
 
-
 		lblShelterTitle = new JLabel("收容所");
 		lblShelterTitle.setHorizontalAlignment(SwingConstants.TRAILING);
 		panelInfo.add(lblShelterTitle);
@@ -168,10 +182,10 @@ public class InsertItemPanel extends JPanel {
 	}
 
 	public void setShelter(String shelter_name) {
-		//jtfShelter.setText(shelter_name);
+		// jtfShelter.setText(shelter_name);
 		cbxShelter.setSelectedItem(shelter_name);
 	}
-	
+
 	public void listShelter(List<ShelterDTO> shelterList) {
 		cbxShelter.removeAllItems();
 		if (shelterList != null && !shelterList.isEmpty()) {

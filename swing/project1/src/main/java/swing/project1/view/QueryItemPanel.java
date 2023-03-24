@@ -52,6 +52,7 @@ public class QueryItemPanel extends JPanel {
 
 	private ArrayList<IComponents> components;
 	private boolean isEditMode = false;
+
 	/**
 	 * Create the panel.
 	 */
@@ -105,14 +106,24 @@ public class QueryItemPanel extends JPanel {
 		btnSumit = new JButton("送出");
 		btnSumit.setEnabled(false);
 		// TODO addActionListener{dao.update(getQueryItem())}
+		btnSumit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setEditMode(isEditMode);
+			}
+		});
 		panelTitleOperation.add(btnSumit);
 
 		btnDelete = new JButton("刪除");
 		// TODO addActionListener{dao.delete(getQueryItem())}
+		btnDelete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setEditMode(isEditMode);
+			}
+		});
 		panelTitleOperation.add(btnDelete);
 
-		
-		
 		panelContent = new JPanel();
 		add(panelContent, BorderLayout.CENTER);
 		panelContent.setLayout(new BorderLayout(0, 0));
@@ -185,7 +196,7 @@ public class QueryItemPanel extends JPanel {
 		}
 	}
 
-	public void setEditMode(boolean isEditMode){
+	public void setEditMode(boolean isEditMode) {
 		this.isEditMode = isEditMode;
 		btnEdit.setEnabled(!isEditMode);
 		btnDelete.setEnabled(!isEditMode);
@@ -195,11 +206,12 @@ public class QueryItemPanel extends JPanel {
 		setEnble(isEditMode);
 	}
 
-	private QueryItem getQueryItem(){
+	private QueryItem getQueryItem() {
 		QueryItem qi = new QueryItem(Integer.parseInt(lblIdValue.getText()));
-		// TODO 
+		// TODO
 		return qi;
 	}
+
 	public void setImage(String album_file) {
 		panelImg.setImage(album_file);
 	}
@@ -222,10 +234,10 @@ public class QueryItemPanel extends JPanel {
 	}
 
 	public void setShelter(String shelter_name) {
-		//jtfShelter.setText(shelter_name);
+		// jtfShelter.setText(shelter_name);
 		cbxShelter.setSelectedItem(shelter_name);
 	}
-	
+
 	public void listShelter(List<ShelterDTO> shelterList) {
 		cbxShelter.removeAllItems();
 		if (shelterList != null && !shelterList.isEmpty()) {
