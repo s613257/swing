@@ -2,53 +2,66 @@ package swing.project1.db.dto;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+
+import org.apache.commons.csv.CSVRecord;
+import org.json.simple.JSONObject;
+
+import swing.project1.model.QueryItem;
 
 public class AdoptionInfoDTO {
 	int animal_id;
-	int animal_shelter_pkid;
 	String animal_kind;
 	String animal_Variety;
 	String animal_sex;
-	String animal_update;
-	Date animal_createtime;
 	String shelter_name;
 	String album_file;
-	String album_update;
-	String cDate;
 
 	public AdoptionInfoDTO() {
 		animal_id = 0;
 	}
+	
+	public AdoptionInfoDTO(int id) {
+		animal_id = id;
+	}
+
+	public AdoptionInfoDTO(QueryItem qi) {
+		this.animal_id = qi.getAnimal_id();
+		this.animal_kind = qi.getAnimal_kind();
+		this.animal_Variety = qi.getAnimal_Variety();
+		this.animal_sex = qi.getAnimal_sex();
+		this.shelter_name = qi.getShelter_name();
+		this.album_file = qi.getAlbum_file();
+	}
 
 	public AdoptionInfoDTO(ResultSet rs) throws SQLException {
 		this.animal_id = rs.getInt("animal_id");
-		this.animal_shelter_pkid = rs.getInt("animal_shelter_pkid");
 		this.animal_kind = rs.getString("animal_kind");
 		this.animal_Variety = rs.getString("animal_Variety");
 		this.animal_sex = rs.getString("animal_sex");
-		this.animal_update = rs.getString("animal_update");
-		this.animal_createtime = rs.getDate("animal_createtime");
 		this.shelter_name = rs.getString("shelter_name");
 		this.album_file = rs.getString("album_file");
-		this.album_update = rs.getString("album_update");
-		this.cDate = rs.getString("cDate");
+	}
+
+	public AdoptionInfoDTO(CSVRecord record) {
+		this.animal_id = Integer.parseInt(record.get("animal_id"));
+		this.animal_kind = record.get("animal_kind");
+		this.animal_Variety = record.get("animal_Variety");
+		this.animal_sex = record.get("animal_sex");
+		this.shelter_name = record.get("shelter_name");
+		this.album_file = record.get("album_file");
+	}
+	
+	public AdoptionInfoDTO(JSONObject jb) {
+		this.animal_id = Integer.parseInt(jb.get("animal_id").toString());
+		this.animal_kind = jb.get("animal_kind").toString();
+		this.animal_Variety = jb.get("animal_Variety").toString();
+		this.animal_sex = jb.get("animal_sex").toString();
+		this.shelter_name = jb.get("shelter_name").toString();
+		this.album_file = jb.get("album_file").toString();
 	}
 
 	public int getAnimal_id() {
 		return animal_id;
-	}
-
-	public void setAnimal_id(int animal_id) {
-		this.animal_id = animal_id;
-	}
-
-	public int getAnimal_shelter_pkid() {
-		return animal_shelter_pkid;
-	}
-
-	public void setAnimal_shelter_pkid(int animal_shelter_pkid) {
-		this.animal_shelter_pkid = animal_shelter_pkid;
 	}
 
 	public String getAnimal_kind() {
@@ -75,22 +88,6 @@ public class AdoptionInfoDTO {
 		this.animal_sex = animal_sex;
 	}
 
-	public String getAnimal_update() {
-		return animal_update;
-	}
-
-	public void setAnimal_update(String animal_update) {
-		this.animal_update = animal_update;
-	}
-
-	public Date getAnimal_createtime() {
-		return animal_createtime;
-	}
-
-	public void setAnimal_createtime(Date animal_createtime) {
-		this.animal_createtime = animal_createtime;
-	}
-
 	public String getShelter_name() {
 		return shelter_name;
 	}
@@ -106,41 +103,19 @@ public class AdoptionInfoDTO {
 	public void setAlbum_file(String album_file) {
 		this.album_file = album_file;
 	}
-
-	public String getAlbum_update() {
-		return album_update;
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject toJSONObject() {
+		JSONObject result = new JSONObject();
+		result.put("animal_id", animal_id);
+		result.put("animal_kind", animal_kind);
+		result.put("animal_Variety", animal_Variety);
+		result.put("animal_sex", animal_sex);
+		result.put("shelter_name", shelter_name);
+		result.put("album_file", album_file);
+		return result;
 	}
-
-	public void setAlbum_update(String album_update) {
-		this.album_update = album_update;
-	}
-
-	public String getcDate() {
-		return cDate;
-	}
-
-	public void setcDate(String cDate) {
-		this.cDate = cDate;
-	}
-
-	@Override
-	public String toString() {
-		return "AdoptionInfoDTO [animal_id=" + animal_id + ", animal_shelter_pkid=" + animal_shelter_pkid
-				+ ", animal_kind=" + animal_kind + ", animal_Variety=" + animal_Variety + ", animal_sex=" + animal_sex
-				+ ", animal_update=" + animal_update + ", animal_createtime=" + animal_createtime + ", shelter_name="
-				+ shelter_name + ", album_file=" + album_file + ", album_update=" + album_update + ", cDate=" + cDate
-				+ "]";
-	}
-
-	public String getUpdateStament() {
-		return String.format("update t_adoption_info set shelter_name= '%s' where animal_id = %d", shelter_name,
-				animal_id);
-	}
-
-	public String getInsertStament() {
-		return String.format("insert into t_adoption_info values(%d,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s)", animal_id,
-				animal_shelter_pkid, animal_kind, animal_Variety, animal_sex, animal_update, animal_createtime,
-				shelter_name, album_file, album_update, cDate);
-
+	public static String[] getCsvTitle() {
+		return ("animal_id,animal_kind,animal_Variety,animal_sex,shelter_name,album_file").split(",");
 	}
 }

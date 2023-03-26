@@ -10,6 +10,9 @@ public interface AdoptionInfoDAO {
 
 	public List<AdoptionInfoDTO> getAllAdoptionInfo();
 	public List<AdoptionInfoDTO> getInfoByCondition(QueryCondition qc);
+	public int insertByQueryItem(QueryItem data);
+	public int insertByQueryItems(List<QueryItem> datas);
 	public int updateByQueryItem(QueryItem data);
 	public int deleteById(String animal_id);
+	
 }

@@ -18,7 +18,11 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+import swing.project1.db.dao.AdoptionInfoDAO;
+import swing.project1.db.dao.impl.AdoptionInfoDAOImpl;
 import swing.project1.db.dto.ShelterDTO;
+import swing.project1.model.QueryCondition;
+import swing.project1.model.QueryItem;
 import swing.project1.model.ShelterListItem;
 import swing.project1.view.components.ComponentTextField;
 import swing.project1.view.components.ImagePanel;
@@ -26,8 +30,9 @@ import swing.project1.view.components.MyComboBox;
 import swing.project1.view.components.MyRadioGroup;
 
 public class InsertItemPanel extends JPanel {
-	private JDialog parent;
-	
+	private JDialog parentWindow;
+	private MainFrame parentFrame;
+
 	private JPanel panelTitle;
 	private JPanel panelContent;
 	private JLabel lblIdTitle;
@@ -51,9 +56,11 @@ public class InsertItemPanel extends JPanel {
 
 	/**
 	 * Create the panel.
+	 * @param mainFrame 
 	 */
-	public InsertItemPanel(JDialog parent) {
-		this.parent = parent;
+	public InsertItemPanel(MainFrame mainFrame, JDialog parent) {
+		this.parentFrame = mainFrame;
+		this.parentWindow = parent;
 		initPanel();
 	}
 
@@ -80,21 +87,34 @@ public class InsertItemPanel extends JPanel {
 
 		btnSumit = new JButton("新增");
 		// TODO addActionListener{dao.update(getQueryItem())}
-		panelTitleOperation.add(btnSumit);
-		
-		
-
-		btnCancel = new JButton("取消");
-		panelTitleOperation.add(btnCancel);
-		// TODO addActionListener{dao.delete(getQueryItem())}
-				
-		btnCancel.addActionListener(new ActionListener() {
+		btnSumit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				parent.setVisible(false);
+				// 1.insert this record
+				AdoptionInfoDAO aid = new AdoptionInfoDAOImpl();
+				aid.insertByQueryItem(getQueryItem());
+				// 2.clear this object
+				clearRecord();
+				// 3.close pop up window
+				parentWindow.setVisible(false);
+				// 4.refresh query result
+				QueryCondition qc = parentFrame.getQueryCondition();
+				parentFrame.showQueryResult(aid.getInfoByCondition(qc));
 			}
 		});
 		
+		panelTitleOperation.add(btnSumit);
+
+		btnCancel = new JButton("取消");
+		btnCancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clearRecord();
+				parentWindow.setVisible(false);
+			}
+		});
+		panelTitleOperation.add(btnCancel);
+
 		panelContent = new JPanel();
 		add(panelContent, BorderLayout.CENTER);
 		panelContent.setLayout(new BorderLayout(0, 0));
@@ -189,5 +209,22 @@ public class InsertItemPanel extends JPanel {
 				cbxShelter.addItem(new ShelterListItem(shelter));
 			}
 		}
+	}
+	
+	private QueryItem getQueryItem() {
+		QueryItem qi = new QueryItem();
+		qi.setAnimal_kind(jtfKindValue.getText());
+		qi.setAnimal_Variety(jtfVarietyValue.getText());
+		qi.setAnimal_sex(btnGroupSex.getText().equals("公") ? "M" : "F");
+		qi.setAlbum_file(panelImg.getCurrImgPath()); // TODO V
+		qi.setShelter_name(cbxShelter.getText());
+		return qi;
+	}
+	private void clearRecord() {
+		jtfKindValue.setText("");
+		jtfVarietyValue.setText("");
+		radioBtnMale.setSelected(true);
+		panelImg.setImage("");
+		cbxShelter.setSelectedIndex(0);
 	}
 }

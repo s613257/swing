@@ -25,19 +25,39 @@ public class AdoptionInfoDAOImpl extends BaseDAO_MySql implements AdoptionInfoDA
 	public List<AdoptionInfoDTO> getInfoByCondition(QueryCondition qc) {
 		return getInfoBySql(String.format("SELECT * FROM t_adoption_info%s", qc.toWhereStatemant()));
 	}
-	
+
+	@Override
+	public int insertByQueryItem(QueryItem data) {
+		String sql = data.getInsertSqlCmd();
+		System.out.println(sql);
+		return executeUpdate(sql);
+	}
+
+	@Override
+	public int insertByQueryItems(List<QueryItem> datas) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("insert into t_adoption_info "
+				+ "(album_file, animal_kind, animal_Variety, animal_sex, shelter_name ) "
+				+ "values ");
+		for(QueryItem qi : datas) {
+			sb.append(qi.getInsertValue() + ",");
+		}
+
+		return executeUpdate(sb.toString().substring(0, sb.length()-1));
+	}
+
 	@Override
 	public int updateByQueryItem(QueryItem dataSource) {
 		String sql = dataSource.getUpdateSqlCmd();
 		System.out.println(sql);
 		return executeUpdate(sql);
 	}
-	
+
 	@Override
 	public int deleteById(String animal_id) {
 		return executeUpdate(String.format("DELETE FROM t_adoption_info WHERE animal_id = %s;", animal_id));
 	}
-	
+
 	private List<AdoptionInfoDTO> getInfoBySql(String sql) {
 		List<AdoptionInfoDTO> resultList = new ArrayList<AdoptionInfoDTO>();
 		Statement st = null;
@@ -55,7 +75,7 @@ public class AdoptionInfoDAOImpl extends BaseDAO_MySql implements AdoptionInfoDA
 		}
 		return resultList;
 	}
-	
+
 	private int executeUpdate(String sql) {
 		Statement st = null;
 		int effectRow = 0;

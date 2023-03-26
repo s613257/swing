@@ -32,7 +32,7 @@ import swing.project1.view.components.intface.IComponents;
 
 public class QueryItemPanel extends JPanel {
 	private MainFrame parent;
-
+	private QueryItem oriData;
 	private JPanel panelTitle;
 	private JPanel panelContent;
 	private JLabel lblIdTitle;
@@ -69,7 +69,7 @@ public class QueryItemPanel extends JPanel {
 
 	public QueryItemPanel(MainFrame parent, QueryItem data) {
 		this.parent = parent;
-
+		this.oriData = data;
 		initPanel();
 		setEditMode(isEditMode);
 		this.lblIdValue.setText(Integer.toString(data.getAnimal_id()));
@@ -121,8 +121,13 @@ public class QueryItemPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// 1. update current record
 				// 2. refresh query result
+				QueryItem currRecord = getQueryItem();
+				if(currRecord.equals(oriData)) {
+					setEditMode(!isEditMode);
+					return;
+				}
 				AdoptionInfoDAO aid = new AdoptionInfoDAOImpl();
-				aid.updateByQueryItem(getQueryItem());
+				aid.updateByQueryItem(currRecord);
 
 				QueryCondition qc = parent.getQueryCondition();
 				parent.showQueryResult(aid.getInfoByCondition(qc));
@@ -233,7 +238,7 @@ public class QueryItemPanel extends JPanel {
 		qi.setAnimal_kind(jtfKindValue.getText());
 		qi.setAnimal_Variety(jtfVarietyValue.getText());
 		qi.setAnimal_sex(btnGroupSex.getText().equals("公") ? "M" : "F");
-		qi.setAlbum_file(panelImg.getCurrImgPath()); // TODO V
+		qi.setAlbum_file(panelImg.getCurrImgPath());
 		qi.setShelter_name(cbxShelter.getText());
 		return qi;
 	}
@@ -251,8 +256,7 @@ public class QueryItemPanel extends JPanel {
 	}
 
 	public void setSex(String animal_sex) {
-		// btnGroupSex.setSex(animal_sex);
-		if (animal_sex.toUpperCase().equals("F")) {
+		if (animal_sex.toUpperCase().trim().equals("F")) {
 			radioBtnFemale.setSelected(true);
 		} else {
 			radioBtnMale.setSelected(true);

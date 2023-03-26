@@ -25,7 +25,7 @@ public class MyComboBox<E> extends JComboBox<E> implements IComponents {
 	
 	public void setSelectedItem(String itemText) {
 		for(int i = 0;i<dataModel.getSize();i++) {
-			if(dataModel.getElementAt(i).equals(itemText)) {
+			if(((ShelterDTO)dataModel.getElementAt(i)).getShelter_name().equals(itemText)) {
 				dataModel.setSelectedItem(dataModel.getElementAt(i));
 				break;
 			}

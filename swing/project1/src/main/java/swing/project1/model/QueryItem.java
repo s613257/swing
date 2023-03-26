@@ -10,6 +10,9 @@ public class QueryItem {
 	String animal_sex;
 	String shelter_name;
 
+	public QueryItem() {
+	}
+
 	public QueryItem(int animal_id) {
 		this.animal_id = animal_id;
 	}
@@ -67,9 +70,52 @@ public class QueryItem {
 		this.shelter_name = shelter_name;
 	}
 
+	public String getInsertSqlCmd() {
+		return String.format("insert into t_adoption_info "
+				+ "( album_file, animal_kind, animal_Variety, animal_sex, shelter_name ) values " + "%s;",
+				getInsertValue());
+	}
+
+	public String getInsertValue() {
+		return String.format("( '%s', '%s', '%s', '%s', '%s')", album_file, animal_kind, animal_Variety,
+				animal_sex, shelter_name);
+	}
+
 	public String getUpdateSqlCmd() {
 		return String.format(
 				"UPDATE t_adoption_info SET album_file = '%s',  animal_kind = '%s',  animal_Variety = '%s',  animal_sex = '%s',  shelter_name = '%s' WHERE animal_id = %d",
 				album_file, animal_kind, animal_Variety, animal_sex, shelter_name, animal_id);
+
+	}
+	
+	
+
+	@Override
+	public String toString() {
+		return "QueryItem [animal_id=" + animal_id + ", album_file=" + album_file + ", animal_kind=" + animal_kind
+				+ ", animal_Variety=" + animal_Variety + ", animal_sex=" + animal_sex + ", shelter_name=" + shelter_name
+				+ "]";
+	}
+
+	public boolean equals(QueryItem item) {
+		if (this.animal_id != item.getAnimal_id()) {
+			return false;
+		}
+		if (!this.album_file.trim().equals(item.getAlbum_file().trim())) {
+			return false;
+		}
+		if (!this.animal_kind.trim().equals(item.getAnimal_kind().trim())) {
+			return false;
+		}
+		if (!this.animal_Variety.trim().equals(item.getAnimal_Variety().trim())) {
+			return false;
+		}
+		if (!this.animal_sex.trim().equals(item.getAnimal_sex().trim())) {
+			return false;
+		}
+		if (!this.shelter_name.trim().equals(item.getShelter_name().trim())) {
+			return false;
+		}
+		return true;
 	}
 }

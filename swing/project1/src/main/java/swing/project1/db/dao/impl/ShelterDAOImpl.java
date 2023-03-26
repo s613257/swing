@@ -13,7 +13,7 @@ import swing.project1.db.dto.ShelterDTO;
 
 public class ShelterDAOImpl extends BaseDAO_MySql implements ShelterDAO {
 
-	
+	@Override
 	public List<ShelterDTO> getAllShelter() {
 		List<ShelterDTO> resultList = new ArrayList<ShelterDTO>();
 		Connection conn = getConnection();

@@ -82,7 +82,8 @@ public class ImagePanel extends JPanel {
 	
 	private void showLocalImage(File f) {
 		try {
-			currentImgPath = f.getPath();
+			currentImgPath = f.getAbsolutePath();
+			currentImgPath = currentImgPath.replaceAll("\\\\", "/");
 			image = ImageIO.read(f);
 		} catch (IOException e) {
 			e.printStackTrace();

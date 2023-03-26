@@ -18,19 +18,29 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.apache.commons.io.FilenameUtils;
+
+import swing.project1.db.dao.AdoptionInfoDAO;
 import swing.project1.db.dao.ShelterDAO;
+import swing.project1.db.dao.impl.AdoptionInfoDAOImpl;
 import swing.project1.db.dao.impl.ShelterDAOImpl;
 import swing.project1.db.dto.AdoptionInfoDTO;
 import swing.project1.db.dto.ShelterDTO;
 import swing.project1.model.QueryCondition;
 import swing.project1.model.QueryItem;
 import swing.project1.model.ShelterListItem;
+import swing.project1.model.io.IFileFactory;
+import swing.project1.model.io.impl.CSVFileFactory;
+import swing.project1.model.io.impl.FileIOFactory;
+import swing.project1.model.io.impl.JsonFileFactory;
+import swing.project1.model.io.impl.XmlFileFactory;
 import swing.project1.view.components.MyComboBox;
 import swing.project1.view.components.MyRadioButton;
 import swing.project1.view.components.MyRadioGroup;
@@ -38,10 +48,10 @@ import swing.project1.view.listener.QueryBtnListener;
 
 public class MainFrame extends JFrame {
 
+	private MainFrame thisMF;
 	private JPanel contentPane;
 	private JPanel panelQueryResultList;
 	private static List<AdoptionInfoDTO> currQueryItems;
-
 	private static List<ShelterDTO> shelterList = null;
 
 	// Kind
@@ -79,7 +89,7 @@ public class MainFrame extends JFrame {
 		JMenuItem mntmNew1Record = new JMenuItem("新增單筆資料");
 		jd = new JDialog(this);
 		jd.setBounds(200, 200, 400, 500);
-		jd.add(new InsertItemPanel(jd));
+		jd.add(new InsertItemPanel(this, jd));
 		mntmNew1Record.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -91,32 +101,84 @@ public class MainFrame extends JFrame {
 		JMenuItem mntmImportRecords = new JMenuItem("匯入資料");
 		// TODO
 		mntmImportRecords.addActionListener(new ActionListener() {
-			private MainFrame parent;
-
-			public ActionListener init(MainFrame parent) {
-				this.parent = parent;
-				return this;
-			}
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser();
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("檔案", "csv", "json", "xml");
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				fileChooser.setFileFilter(filter);
-				int option = fileChooser.showOpenDialog(parent);
+				int option = fileChooser.showOpenDialog(thisMF);
 				if (option == JFileChooser.APPROVE_OPTION) {
-					File file = fileChooser.getSelectedFile();
-					// TODO
+					File f = fileChooser.getSelectedFile();
+					String fileFullName = f.getAbsolutePath();
+					String fileType = FilenameUtils.getExtension(fileFullName);
+					
+					if ((fileType != null) && !fileType.isEmpty()) {
+						IFileFactory fileFac = null;
+						switch (fileType) {
+						case "csv":
+							fileFac = new CSVFileFactory();
+							break;
+						case "json":
+							fileFac = new JsonFileFactory();
+							break;
+						case "xml":
+							fileFac = new XmlFileFactory();
+							break;
+						default:
+							fileFac = new CSVFileFactory();
+							break;
+						}
+						FileIOFactory fioFac = new FileIOFactory(fileFac);
+						AdoptionInfoDAO aid = new AdoptionInfoDAOImpl();
+						aid.insertByQueryItems(fioFac.getDatasInFile(fileFullName));
+						
+						JOptionPane.showMessageDialog(thisMF,
+								String.format("輸入成功!(%s)", IFileFactory.HOME_DOWNLOADS_FOLDER));
+					}
 				}
 			}
-		}.init(this));
+		});
 
 		mnNewMenu.add(mntmImportRecords);
 
 		JMenuItem mntmExportResult = new JMenuItem("匯出查詢結果");
 		mnNewMenu.add(mntmExportResult);
-		// addMouseListener(new MouseAdapter() {...currQueryItems...});
+		mntmExportResult.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (currQueryItems.isEmpty()) {
+					JOptionPane.showMessageDialog(thisMF, "無搜尋結果輸出!", "提示", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				String[] possibilities = { "csv", "json", "xml" };
+				String fileType = (String) JOptionPane.showInputDialog(thisMF, "匯出檔案格式", "匯出檔案",
+						JOptionPane.PLAIN_MESSAGE, null, possibilities, possibilities[0]);
+
+				if ((fileType != null) && !fileType.isEmpty()) {
+					IFileFactory fileFac = null;
+					switch (fileType) {
+					case "csv":
+						fileFac = new CSVFileFactory();
+						break;
+					case "json":
+						fileFac = new JsonFileFactory();
+						break;
+					case "xml":
+						fileFac = new XmlFileFactory();
+						break;
+					default:
+						fileFac = new CSVFileFactory();
+						break;
+					}
+					FileIOFactory fioFac = new FileIOFactory(fileFac);
+					fioFac.writeDataToFile(currQueryItems);
+					JOptionPane.showMessageDialog(thisMF,
+							String.format("輸出成功!(%s)", IFileFactory.HOME_DOWNLOADS_FOLDER));
+				}
+			}
+		});
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -202,8 +264,9 @@ public class MainFrame extends JFrame {
 		panelQueryResultList = new JPanel();
 		panelQueryResult.add(panelQueryResultList);
 		panelQueryResultList.setLayout(new GridLayout(0, 4, 0, 0));
-		
+
 		currQueryItems = new ArrayList<AdoptionInfoDTO>();
+		this.thisMF = this;
 	}
 
 	public void showQueryResult(List<AdoptionInfoDTO> queryItems) {
